@@ -1,0 +1,3 @@
+module APNSTestServer {
+    header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/APNSTestServer.build/include/APNSTestServer-Swift.h"
+}

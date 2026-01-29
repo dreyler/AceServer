@@ -1,0 +1,4 @@
+module CNIOPosix {
+    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio/Sources/CNIOPosix/include/CNIOPosix.h"
+    export *
+}

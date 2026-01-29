@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/master.swiftdeps"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/apns/Sources/VaporAPNS/APNSContainerID.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainerID.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainerID.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainerID~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainerID.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainerID.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/apns/Sources/VaporAPNS/APNSContainers.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainers.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainers.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainers~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainers.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/APNSContainers.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/apns/Sources/VaporAPNS/Application+APNS.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Application+APNS.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Application+APNS.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Application+APNS~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Application+APNS.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Application+APNS.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/apns/Sources/VaporAPNS/Request+APNS.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Request+APNS.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Request+APNS.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Request+APNS~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Request+APNS.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporAPNS.build/Request+APNS.dia"
+  }
+}

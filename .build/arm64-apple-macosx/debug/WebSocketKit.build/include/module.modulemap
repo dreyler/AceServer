@@ -1,0 +1,3 @@
+module WebSocketKit {
+    header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/include/WebSocketKit-Swift.h"
+}

@@ -1,0 +1,4 @@
+module CNIOAtomics {
+    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio/Sources/CNIOAtomics/include/CNIOAtomics.h"
+    export *
+}

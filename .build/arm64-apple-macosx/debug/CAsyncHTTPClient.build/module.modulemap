@@ -1,0 +1,4 @@
+module CAsyncHTTPClient {
+    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/async-http-client/Sources/CAsyncHTTPClient/include/CAsyncHTTPClient.h"
+    export *
+}

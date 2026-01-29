@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/master.swiftdeps"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/vapor/Sources/VaporTestUtils/TestingApplication.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingApplication.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingApplication.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingApplication~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingApplication.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingApplication.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/vapor/Sources/VaporTestUtils/TestingHTTPRequest.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPRequest.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPRequest.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPRequest~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPRequest.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPRequest.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/vapor/Sources/VaporTestUtils/TestingHTTPResponse.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPResponse.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPResponse.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPResponse~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPResponse.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/TestingHTTPResponse.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/vapor/Sources/VaporTestUtils/Utilities.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/Utilities.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/Utilities.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/Utilities~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/Utilities.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/Utilities.dia"
+  }
+}

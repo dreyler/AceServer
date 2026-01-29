@@ -1,0 +1,3 @@
+module VaporTestUtils {
+    header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/VaporTestUtils.build/include/VaporTestUtils-Swift.h"
+}

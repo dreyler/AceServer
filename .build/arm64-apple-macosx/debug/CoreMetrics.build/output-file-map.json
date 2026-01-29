@@ -1,0 +1,19 @@
+{
+  "": {
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/master.swiftdeps"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-metrics/Sources/CoreMetrics/Locks.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Locks.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Locks.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Locks~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Locks.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Locks.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-metrics/Sources/CoreMetrics/Metrics.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Metrics.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Metrics.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Metrics~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Metrics.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/CoreMetrics.build/Metrics.dia"
+  }
+}

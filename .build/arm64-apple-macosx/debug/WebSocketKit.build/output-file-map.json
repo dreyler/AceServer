@@ -1,0 +1,54 @@
+{
+  "": {
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/master.swiftdeps"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/Concurrency/WebSocket+Concurrency.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Concurrency.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Concurrency.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Concurrency~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Concurrency.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Concurrency.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/Exports.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/Exports.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/Exports.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/Exports~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/Exports.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/Exports.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/HTTPUpgradeRequestHandler.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/HTTPUpgradeRequestHandler.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/HTTPUpgradeRequestHandler.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/HTTPUpgradeRequestHandler~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/HTTPUpgradeRequestHandler.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/HTTPUpgradeRequestHandler.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocket+Connect.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Connect.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Connect.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Connect~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Connect.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket+Connect.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocket.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocket.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocketClient.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketClient.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketClient.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketClient.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketClient.dia"
+  },
+  "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocketHandler.swift": {
+    "dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketHandler.d",
+    "object": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketHandler.swift.o",
+    "swiftmodule": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketHandler~partial.swiftmodule",
+    "swift-dependencies": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketHandler.swiftdeps",
+    "diagnostics": "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/WebSocketKit.build/WebSocketHandler.dia"
+  }
+}

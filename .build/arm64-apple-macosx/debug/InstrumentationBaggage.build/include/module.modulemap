@@ -1,0 +1,3 @@
+module InstrumentationBaggage {
+    header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/arm64-apple-macosx/debug/InstrumentationBaggage.build/include/InstrumentationBaggage-Swift.h"
+}

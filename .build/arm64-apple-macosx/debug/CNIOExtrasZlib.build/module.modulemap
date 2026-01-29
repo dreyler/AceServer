@@ -1,0 +1,4 @@
+module CNIOExtrasZlib {
+    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/CNIOExtrasZlib/include/CNIOExtrasZlib.h"
+    export *
+}

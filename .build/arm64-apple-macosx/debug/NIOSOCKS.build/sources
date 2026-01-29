@@ -1,0 +1,12 @@
+'/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Channel Handlers/SOCKSClientHandler.swift'
+'/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Channel Handlers/SOCKSServerHandshakeHandler.swift'
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/AuthenticationMethod.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/ClientGreeting.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/Errors.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/Helpers.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/Messages.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/SOCKSRequest.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/SOCKSResponse.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/Messages/SelectedAuthenticationMethod.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/State/ClientStateMachine.swift
+/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio-extras/Sources/NIOSOCKS/State/ServerStateMachine.swift
