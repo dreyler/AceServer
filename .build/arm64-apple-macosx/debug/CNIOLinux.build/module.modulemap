@@ -1,4 +1,0 @@
-module CNIOLinux {
-    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio/Sources/CNIOLinux/include/CNIOLinux.h"
-    export *
-}

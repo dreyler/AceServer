@@ -1,4 +1,0 @@
-module CNIOOpenBSD {
-    umbrella header "/Users/davideyler/.gemini/antigravity/scratch/AceServer/.build/checkouts/swift-nio/Sources/CNIOOpenBSD/include/CNIOOpenBSD.h"
-    export *
-}
