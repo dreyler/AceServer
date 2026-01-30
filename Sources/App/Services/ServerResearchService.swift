@@ -91,7 +91,6 @@ public class ServerResearchService {
                     bestProfile = profile
                     break // Take first valid match
                 } else {
-                } else {
                     print("   ❌ Rejected: \(profile.title.prefix(40))... - \(reason)")
                 }
             }
@@ -121,7 +120,6 @@ public class ServerResearchService {
                             print("   ✅ Found via domain fallback: \(profile.title)")
                             bestProfile = profile
                             break
-                        } else {
                         } else {
                             print("   ❌ Fallback rejected: \(profile.title.prefix(30))... - \(reason)")
                         }
@@ -181,49 +179,89 @@ public class ServerResearchService {
         let cleanedTitle = cleanLinkedInName(titleName)
         let resultParts = cleanedTitle.split(separator: " ")
         
-        // Basic Length Check
+        // Case A: Single Name Search (e.g. "Brittany")
+        if searchParts.count == 1 {
+            let searchNameStr = searchParts.first?.lowercased() ?? ""
+            let resultNameStr = resultParts.first?.lowercased() ?? ""
+            
+            // 1. Name Check: Exact or Prefix Match
+            if !resultNameStr.hasPrefix(searchNameStr) {
+                // Email username heuristic (e.g. "ablue" matches "Allen Blue")
+                var isEmailMatch = false
+                if searchNameStr.count > 3 && resultParts.count >= 2 {
+                    let rFirstInitial = resultParts.first?.prefix(1).lowercased() ?? ""
+                    let rLastName = resultParts.last?.lowercased() ?? ""
+                    
+                    if searchNameStr.hasPrefix(rFirstInitial) && searchNameStr.contains(rLastName) {
+                        isEmailMatch = true
+                    }
+                }
+                
+                if !isEmailMatch {
+                    return (false, "Name mismatch: Expected start with '\(searchNameStr)', got '\(resultNameStr)'")
+                }
+            }
+            
+            // 2. Domain Check (ONLY for single-name searches, per legacy behavior)
+            let domainPrefix = String(domain.prefix(6)).lowercased()
+            let combinedText = (item.title + " " + item.snippet).lowercased().replacingOccurrences(of: " ", with: "")
+            
+            if !combinedText.contains(domainPrefix) {
+                return (false, "Domain context fail: '\(domainPrefix)' not found")
+            }
+            
+            return (true, "Match (Single Name + Context)")
+        }
+        
+        // Case B: Full Name Search (e.g. "Ted Kummert")
         guard resultParts.count >= 2 else {
-             // Allow single name match if search matches exact
-             if searchParts.count == 1 && cleanedTitle.lowercased().contains(cleanSearch.lowercased()) {
-                 return (true, "Match (Single Name Exact)")
-             }
-             return (false, "Result too short")
+            return (false, "Result name has too few parts")
         }
         
-        // Name Match Logic (Permissive)
-        let sFirst = searchParts.first?.lowercased() ?? ""
-        let sLast = searchParts.last?.lowercased() ?? ""
-        let resultStr = cleanedTitle.lowercased()
+        let sFirstStr = searchParts.first?.lowercased() ?? ""
+        let rFirstStr = resultParts.first?.lowercased() ?? ""
+        let sLastStr = searchParts.last?.lowercased() ?? ""
+        let rLastStr = resultParts.last?.lowercased() ?? ""
         
-        // 1. Check if full search name is contained in result
-        if resultStr.contains(sFirst) && resultStr.contains(sLast) {
-             // Additional check: If domain context exists, use it. If not (personal email), trust the name match.
-             // Additional check: If domain context exists, use it.
-             // REVERTED: This check is too strict. Google search usually ranks correctly for corporate domains.
-             // If we search "ted madrona.com" and get "Ted Kummert", we should accept it even if snippet doesn't say Madrona.
-             // Additional check: If domain context exists, use it.
-             if !domain.isEmpty {
-                 let domainPrefix = String(domain.prefix(6)).lowercased()
-                 let combinedText = (item.title + " " + item.snippet).lowercased().replacingOccurrences(of: " ", with: "")
-                 
-                 // 1. Strict Prefix Check (e.g. "madrona.com" matches "madrona")
-                 if combinedText.contains(domainPrefix) {
-                     // Pass
-                 } 
-                 // 2. Domain Base Check (Legacy Fallback: "sky.uk" -> "sky" matches "Sky")
-                 else {
-                     let domainBase = domain.components(separatedBy: ".").first?.lowercased() ?? ""
-                     if !domainBase.isEmpty, combinedText.contains(domainBase) {
-                        // Pass
-                     } else {
-                        return (false, "Name match but Domain fail")
-                     }
-                 }
-             }
-             return (true, "Match (Permissive Containment)")
+        // 1. First Name Check (2-char prefix)
+        if sFirstStr.count >= 2 && rFirstStr.count >= 2 {
+            let sPrefix = sFirstStr.prefix(2)
+            let rPrefix = rFirstStr.prefix(2)
+            if sPrefix != rPrefix {
+                return (false, "First name mismatch (strict 2-char): Expected '\(sPrefix)', got '\(rPrefix)'")
+            }
+        } else {
+            // Fallback to 1 char
+            if sFirstStr.prefix(1) != rFirstStr.prefix(1) {
+                return (false, "First initial mismatch")
+            }
         }
         
-        return (false, "Name mismatch")
+        // 2. Last Name Check (2-char prefix)
+        if sLastStr.count >= 2 && rLastStr.count >= 2 {
+            let sPrefix = sLastStr.prefix(2)
+            let rPrefix = rLastStr.prefix(2)
+            
+            if sPrefix != rPrefix {
+                // Check for containment (hyphenated names)
+                if rLastStr.contains(sLastStr) {
+                    // Allowed
+                } else if item.title.localizedCaseInsensitiveContains(sLastStr) {
+                    // Maiden/Alt name found in raw title
+                    return (true, "Match (Maiden/Alt Name Found in Title)")
+                } else {
+                    return (false, "Last name mismatch (strict 2-char): Expected '\(sPrefix)', got '\(rPrefix)'")
+                }
+            }
+        } else {
+            // Fallback to 1 char
+            if sLastStr.prefix(1) != rLastStr.prefix(1) {
+                return (false, "Last initial mismatch")
+            }
+        }
+        
+        // NO domain check for full names (legacy behavior)
+        return (true, "Match (Initials Verified)")
     }
     
     // PORTED: cleanLinkedInName
