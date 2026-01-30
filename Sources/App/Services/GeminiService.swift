@@ -2,7 +2,7 @@ import Vapor
 import Foundation
 
 struct GeminiConfig {
-    static let apiKey = "REDACTED_GEMINI_KEY"
+    static let apiKey = Environment.get("GEMINI_API_KEY") ?? ""
     static let modelName = "gemini-3-flash-preview"
     static let endpoint = "https://generativelanguage.googleapis.com/v1beta/models/\(modelName):generateContent"
 }

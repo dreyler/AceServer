@@ -4,3 +4,6 @@
 /test_settings.json
 /*.xcodeproj
 *.xcworkspace
+
+# Environment variables (contains secrets)
+.env

@@ -2,7 +2,7 @@ import Vapor
 import Foundation
 
 struct GoogleSearchConfig {
-    static let apiKey = "REDACTED_SEARCH_KEY"
+    static let apiKey = Environment.get("GOOGLE_SEARCH_API_KEY") ?? ""
     static let searchEngineId = "82d10108f578a48ea" 
 }
 
