@@ -13,7 +13,15 @@ public struct MeetingBriefAgent {
     
     // Generates a notification body with AI insight
     // Orchestrates: Google People -> Research Service -> Gemini
-    public static func generateBrief(meeting: GoogleCalendarEvent, accessToken: String) async -> String {
+    public static func generateBrief(
+        meeting: GoogleCalendarEvent, 
+        accessToken: String, 
+        userEmail: String, 
+        userName: String,
+        userTitle: String? = nil,
+        userCompany: String? = nil,
+        userBio: String? = nil
+    ) async -> (brief: String, prompt: String) {
         
         print("🤖 MeetingBriefAgent: Starting generation for '\(meeting.summary)'")
         
@@ -39,13 +47,17 @@ public struct MeetingBriefAgent {
                 }
             }
             
-            // B. Enrich via Research Service (LinkedIn/Company)
-            // Skip research for self (using simple 'you' check - naive)
+            // B. Enrich via Research Service using UNIFIED Logic
+            // Skip research for self (naive check)
             if !name.lowercased().contains("you") {
-                let research = await ServerResearchService.shared.enrich(name: name, companyContext: company, emailContext: email)
-                if let hit = research.first {
-                    researchSnippet = "\(hit.title) - \(hit.snippet) (\(hit.source))"
-                    print("   -> Enriched '\(name)': \(hit.title)")
+                let enriched = await ServerResearchService.shared.processEnrichment(name: name, email: email)
+                
+                if let co = enriched.companyName {
+                    company = co
+                }
+                if let summary = enriched.researchSummary {
+                    researchSnippet = summary
+                    print("   -> Enriched '\(name)': Found Company/LinkedIn")
                 }
             }
             
@@ -67,14 +79,18 @@ public struct MeetingBriefAgent {
             )
         }
         
-        // Extract user email from access token context (simplified - in real app would decode JWT)
-        // For now, use a placeholder
-        let userEmail = "user@example.com" // TODO: Extract from session/token
+        // Use provided email or fallback
+        let finalUserEmail = userEmail.isEmpty ? "user@example.com" : userEmail
+        let finalUserName = userName.isEmpty ? "User" : userName
         
         let prompt = ServerMeetingPrompt.construct(
             meeting: meeting,
             participants: participantsForPrompt,
-            userEmail: userEmail
+            userEmail: finalUserEmail,
+            userName: finalUserName,
+            userTitle: userTitle,
+            userCompany: userCompany,
+            userBio: userBio
         )
         
         print("🤖 Gemini Request: Prompt length \(prompt.count)")
@@ -83,10 +99,10 @@ public struct MeetingBriefAgent {
         do {
             let insight = try await GeminiService.shared.generateContent(prompt: prompt)
             print("✨ Generated Insight: \(insight.prefix(50))...")
-            return insight
+            return (insight, prompt)
         } catch {
             print("❌ Gemini Gen Failed: \(error)")
-            return "Meeting starts soon."
+            return ("Meeting starts soon.", prompt)
         }
     }
 }

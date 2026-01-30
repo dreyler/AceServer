@@ -18,6 +18,74 @@ public class ServerResearchService {
         let source: String // "Company" or "LinkedIn"
     }
     
+    public struct EnrichmentResult {
+        public let companyName: String?
+        public let researchSummary: String?
+        public let linkedInTitle: String?
+        public let linkedInUrl: String?
+    }
+    
+    // Unified logic used by both API and Agent
+    public func processEnrichment(name: String, email: String) async -> EnrichmentResult {
+        // 1. Resolve via Server Logic
+        let research = await self.enrich(name: name, emailContext: email)
+        
+        // 2. Extract domain
+        var domain = ""
+        if email.contains("@") {
+            domain = email.split(separator: "@").last.map(String.init) ?? ""
+        }
+        
+        var companyName: String? = nil
+        
+        // 3. Attempt to extract Company Name from results
+        if let companyHit = research.first(where: { $0.source == "Company" }) {
+            companyName = _extractCompanyName(title: companyHit.title, domain: domain)
+        } else if !domain.isEmpty {
+            // Fallback to domain ONLY if not personal
+            let personal = ["gmail.com", "yahoo.com", "hotmail.com", "icloud.com", "outlook.com", "aol.com"]
+            if !personal.contains(domain.lowercased()) {
+                companyName = domain
+            }
+        }
+        
+        // Build summary
+        var summaryBuilder = ""
+        
+        if let companyHit = research.first(where: { $0.source == "Company" }) {
+            summaryBuilder += "**Company Info**\n"
+            summaryBuilder += "\(companyHit.title)\n\(companyHit.snippet)\n[Source](\(companyHit.link))\n\n"
+        }
+        
+        var linkedInTitle: String?
+        var linkedInUrl: String?
+        
+        if let linkedInHit = research.first(where: { $0.source == "LinkedIn" }) {
+            summaryBuilder += "**LinkedIn Profile**\n"
+            summaryBuilder += "\(linkedInHit.title)\n\(linkedInHit.snippet)\n[Source](\(linkedInHit.link))"
+            
+            linkedInTitle = linkedInHit.title
+            linkedInUrl = linkedInHit.link
+            
+            // Attempt to extract Company from LinkedIn Title if currently nil
+            if companyName == nil {
+                companyName = _extractCompanyFromLinkedIn(title: linkedInHit.title, personName: name)
+            }
+        }
+        
+        var researchSummary: String?
+        if !summaryBuilder.isEmpty {
+            researchSummary = summaryBuilder
+        }
+        
+        return EnrichmentResult(
+            companyName: companyName,
+            researchSummary: researchSummary,
+            linkedInTitle: linkedInTitle,
+            linkedInUrl: linkedInUrl
+        )
+    }
+
     // Finds LinkedIn profile and Company Info
     public func enrich(name: String, companyContext: String? = nil, emailContext: String? = nil) async -> [ResearchResult] {
         var results: [ResearchResult] = []

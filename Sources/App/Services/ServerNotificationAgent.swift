@@ -84,7 +84,8 @@ class ServerNotificationAgent {
                 // Optimization: Maybe only generate if < 60 mins? 
                 // For now, generate for all to test.
                 app.logger.info("🤖 Generating Brief for '\(meeting.title)'...")
-                let brief = await MeetingBriefAgent.generateBrief(meeting: meeting.googleEvent, accessToken: token)
+                let result = await MeetingBriefAgent.generateBrief(meeting: meeting.googleEvent, accessToken: token, userEmail: "", userName: "")
+                let brief = result.brief
                 
                 return Candidate(
                     meeting: meeting,
