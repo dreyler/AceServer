@@ -17,6 +17,27 @@ struct Person: Codable {
     }
 }
 
+// Google API Models
+public struct GoogleCalendarEvent: Codable {
+    public var summary: String?
+    public var description: String?
+    public var start: GoogleDate?
+    public var end: GoogleDate?
+    public var status: String?
+    public var attendees: [GoogleAttendee]?
+}
+
+public struct GoogleDate: Codable {
+    public var dateTime: String?
+    public var date: String?
+}
+
+public struct GoogleAttendee: Codable {
+    public var email: String
+    public var displayName: String?
+    public var responseStatus: String?
+}
+
 struct Meeting: Codable {
     var id: UUID = UUID()
     var title: String
@@ -25,6 +46,9 @@ struct Meeting: Codable {
     var meetingDescription: String?
     var organizer: String?
     var participants: [Person] = []
+    
+    // Raw Google Data (for AI Agents)
+    var googleEvent: GoogleCalendarEvent
     
     enum MeetingStatus: String, Codable {
         case accepted, declined, tentative, needsAction

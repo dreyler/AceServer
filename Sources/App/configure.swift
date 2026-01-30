@@ -30,7 +30,7 @@ public func configure(_ app: Application) throws {
                 let meetings = await ServerCalendarService.shared.getUpcomingMeetings(accessToken: token, app: app)
                 
                 // 2. Process
-                await ServerNotificationAgent.shared.process(meetings: meetings, routines: routines, app: app)
+                await ServerNotificationAgent.shared.process(meetings: meetings, routines: routines, token: token, app: app)
             }
         }
     }

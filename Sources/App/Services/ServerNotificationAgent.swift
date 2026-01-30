@@ -6,7 +6,7 @@ class ServerNotificationAgent {
     // In-memory state
     private var currentLockScreenItemID: UUID?
     
-    func process(meetings: [Meeting], routines: [Routine], app: Application) async {
+    func process(meetings: [Meeting], routines: [Routine], token: String, app: Application) async {
         let now = Date()
         
         // 1. Candidate Generation
@@ -15,7 +15,8 @@ class ServerNotificationAgent {
         
         for meeting in meetings {
             for routine in routines where routine.isEnabled {
-                if let candidate = evaluate(routine: routine, meeting: meeting, now: now) {
+                // Await the async evaluation (now includes AI generation)
+                if let candidate = await evaluate(routine: routine, meeting: meeting, token: token, now: now, app: app) {
                     app.logger.info("   -> Candidate Found: \(candidate.title) (Type: \(candidate.type))")
                     candidates.append(candidate)
                 }
@@ -71,18 +72,25 @@ class ServerNotificationAgent {
         app.logger.notice("🔔 [PUSH] [VISIBLE] Title: '\(title)' Body: '\(body)'")
     }
     
-    private func evaluate(routine: Routine, meeting: Meeting, now: Date) -> Candidate? {
+    private func evaluate(routine: Routine, meeting: Meeting, token: String, now: Date, app: Application) async -> Candidate? {
         let calendar = Calendar.current
         
         if routine.type == .beforeMeeting {
             // User requested 0-12 hours lookahead
             let minutesUntilStart = calendar.dateComponents([.minute], from: now, to: meeting.startTime).minute ?? 0
             if minutesUntilStart >= 0 && minutesUntilStart <= 720 {
+                
+                // TRIGGER AI GENERATION (Only if close enough)
+                // Optimization: Maybe only generate if < 60 mins? 
+                // For now, generate for all to test.
+                app.logger.info("🤖 Generating Brief for '\(meeting.title)'...")
+                let brief = await MeetingBriefAgent.generateBrief(meeting: meeting.googleEvent, accessToken: token)
+                
                 return Candidate(
                     meeting: meeting,
                     routine: routine,
                     title: "Prep: \(meeting.title)",
-                    body: "Starts in \(minutesUntilStart) min. Review materials.",
+                    body: brief, // Use AI Brief
                     type: .passive
                 )
             }

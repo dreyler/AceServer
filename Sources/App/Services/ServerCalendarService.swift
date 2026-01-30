@@ -8,7 +8,7 @@ import Foundation
 class ServerCalendarService {
     static let shared = ServerCalendarService()
     
-    // Mock Data Toggle - DISABLED for Real Test
+    // Mock Data Toggle - DISABLED (AI Verified)
     var useMockData = false
     
     func getUpcomingMeetings(accessToken: String?, app: Application) async -> [Meeting] {
@@ -50,20 +50,9 @@ class ServerCalendarService {
         }
     }
     
-    // Minimal Google Parser
+    // Use SharedModels definition
     struct GoogleEventList: Codable {
-        let items: [GoogleEvent]
-    }
-    struct GoogleEvent: Codable {
-        let summary: String?
-        let description: String?
-        let start: GoogleDate?
-        let end: GoogleDate?
-        let status: String?
-    }
-    struct GoogleDate: Codable {
-        let dateTime: String?
-        let date: String?
+        let items: [GoogleCalendarEvent]
     }
     
     private func parseGoogleEvents(data: Data) throws -> [Meeting] {
@@ -91,7 +80,8 @@ class ServerCalendarService {
                 startTime: startDate,
                 endTime: endDate,
                 meetingDescription: event.description,
-                organizer: "Imported"
+                organizer: "Imported",
+                googleEvent: event // Store Raw Data
             )
         }
     }
@@ -102,16 +92,27 @@ class ServerCalendarService {
          var meetings: [Meeting] = []
          
          // 1. External Strategy Sync (Start in 10 mins)
-         // Dynamically create a meeting "10 mins from now" whenever this is called
-         // ensuring the Agent picks it up.
-         if let start = calendar.date(byAdding: .minute, value: 5, to: now), // 5 mins from now
+         if let start = calendar.date(byAdding: .minute, value: 5, to: now),
             let end = calendar.date(byAdding: .minute, value: 35, to: now) {
+             
+             let mockEvent = GoogleCalendarEvent(
+                summary: "External Strategy Sync", 
+                description: "Review partnership opportunities.", 
+                start: GoogleDate(dateTime: start.ISO8601Format(), date: nil), 
+                end: GoogleDate(dateTime: end.ISO8601Format(), date: nil), 
+                status: "confirmed", 
+                attendees: [
+                    GoogleAttendee(email: "sarah@external.com", displayName: "Sarah External", responseStatus: "accepted")
+                ]
+             )
+             
              let m = Meeting(
                  title: "External Strategy Sync",
                  startTime: start,
                  endTime: end,
                  meetingDescription: "Review partnership opportunities.",
-                 organizer: "Sarah External"
+                 organizer: "Sarah External",
+                 googleEvent: mockEvent
              )
              meetings.append(m)
          }

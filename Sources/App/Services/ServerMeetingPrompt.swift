@@ -1,0 +1,65 @@
+import Foundation
+
+/// Server-side meeting prompt template (ported from client)
+struct ServerMeetingPrompt {
+    static let template = """
+    You are an executive assistant helping the user prepare for a meeting.
+
+    **Meeting Context**:
+    - Name: {{MEETING_TITLE}}
+    - Description: {{MEETING_DESCRIPTION}}
+    - Time: {{MEETING_TIME}}
+    - Current User Email: {{USER_EMAIL}}
+    - Participants:
+    {{PARTICIPANT_LIST}}
+
+    **Participants**:
+    {{PARTICIPANTS_DATA}}
+
+    **Instructions**:
+    Construct a pre-meeting brief to help the user prepare for the meeting
+
+    Rules:
+    1. For companies, you can use your own knowledge, as well as the provided context
+    2. For participants, do not use your own knowledge, only use the provided context, to avoid giving incorrect information
+    3. Make sure not to get confused and think that the logged in user is a participant
+    4. Don't provide company information about the company that the logged in user works at
+    5. Include company details, such as strategy and recent news
+    6. End with 1 short, strategic suggestion for the user to ask you a follow up question get more prepared for the meeting. put this question, but not the whole response, in italics
+    7. The brief must fit on single iPhone screen (no scrolling), and be dense with value.
+    """
+    
+    static func construct(
+        meeting: GoogleCalendarEvent,
+        participants: [(name: String, email: String, company: String?, linkedin: String?)],
+        userEmail: String
+    ) -> String {
+        var prompt = template
+        
+        // Replace meeting details
+        prompt = prompt.replacingOccurrences(of: "{{MEETING_TITLE}}", with: meeting.summary ?? "Unknown Meeting")
+        prompt = prompt.replacingOccurrences(of: "{{MEETING_DESCRIPTION}}", with: meeting.description ?? "No description")
+        prompt = prompt.replacingOccurrences(of: "{{MEETING_TIME}}", with: meeting.start?.dateTime ?? "Unknown time")
+        prompt = prompt.replacingOccurrences(of: "{{USER_EMAIL}}", with: userEmail)
+        
+        // Build participant list
+        let participantNames = participants.map { $0.name }.joined(separator: ", ")
+        prompt = prompt.replacingOccurrences(of: "{{PARTICIPANT_LIST}}", with: participantNames)
+        
+        // Build detailed participant data
+        var participantsData = ""
+        for p in participants {
+            participantsData += "- **\(p.name)** (\(p.email))\n"
+            if let company = p.company, company != "Unknown" {
+                participantsData += "  Company: \(company)\n"
+            }
+            if let linkedin = p.linkedin {
+                participantsData += "  LinkedIn: \(linkedin)\n"
+            }
+            participantsData += "\n"
+        }
+        prompt = prompt.replacingOccurrences(of: "{{PARTICIPANTS_DATA}}", with: participantsData)
+        
+        return prompt
+    }
+}
