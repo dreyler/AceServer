@@ -23,6 +23,8 @@ public class ServerGooglePeopleService {
         
         guard let url = URL(string: "https://people.googleapis.com/v1/people:searchContacts?query=\(email)&readMask=names,emailAddresses,organizations&pageSize=1") else { return nil }
         
+        print("[TRACE] GooglePeople: ☁️ Calling API for '\(email)'")
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         

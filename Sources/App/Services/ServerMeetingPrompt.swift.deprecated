@@ -35,12 +35,12 @@ struct ServerMeetingPrompt {
     
     static func construct(
         meeting: GoogleCalendarEvent,
-        participants: [(name: String, email: String, company: String?, linkedin: String?)],
+        participants: [(name: String, email: String, company: String?, companyDetails: String?, linkedInDetails: String?)],
         userEmail: String,
         userName: String,
-        userTitle: String?,
-        userCompany: String?,
-        userBio: String?
+        userTitle: String? = nil,
+        userCompany: String? = nil,
+        userBio: String? = nil
     ) -> String {
         var prompt = template
         
@@ -71,18 +71,44 @@ struct ServerMeetingPrompt {
         let participantNames = participants.map { $0.name }.joined(separator: ", ")
         prompt = prompt.replacingOccurrences(of: "{{PARTICIPANT_LIST}}", with: participantNames)
         
-        // Build detailed participant data
-        var participantsData = ""
+        // Build detailed participant data (Grouped by Company)
+        // Grouping Logic
+        var grouped: [String: [(name: String, email: String, company: String?, companyDetails: String?, linkedInDetails: String?)]] = [:]
+        
         for p in participants {
-            participantsData += "- **\(p.name)** (\(p.email))\n"
-            if let company = p.company, company != "Unknown" {
-                participantsData += "  Company: \(company)\n"
+            let key = p.company ?? "Unknown"
+            grouped[key, default: []].append(p)
+        }
+        
+        // Sort companies (Unknown last)
+        let sortedKeys = grouped.keys.sorted { k1, k2 in
+            if k1 == "Unknown" { return false }
+            if k2 == "Unknown" { return true }
+            return k1 < k2
+        }
+        
+        var participantsData = ""
+        
+        for company in sortedKeys {
+            let people = grouped[company] ?? []
+            
+            participantsData += "## \(company)\n"
+            
+            // Show company details ONCE at the top (if available from first person)
+            if let firstPersonWithCompanyInfo = people.first(where: { $0.companyDetails != nil }) {
+                participantsData += "\(firstPersonWithCompanyInfo.companyDetails!)\n\n"
             }
-            if let linkedin = p.linkedin {
-                participantsData += "  LinkedIn: \(linkedin)\n"
+            
+            // Then show each participant's LinkedIn details only (no company duplication)
+            for p in people {
+                participantsData += "- **\(p.name)** (\(p.email))\n"
+                if let linkedIn = p.linkedInDetails {
+                    participantsData += "  \(linkedIn)\n"
+                }
             }
             participantsData += "\n"
         }
+        
         prompt = prompt.replacingOccurrences(of: "{{PARTICIPANTS_DATA}}", with: participantsData)
         
         return prompt

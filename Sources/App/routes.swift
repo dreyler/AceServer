@@ -36,34 +36,55 @@ func routes(_ app: Application) throws {
             userName: briefRequest.userName ?? "",
             userTitle: briefRequest.userTitle,
             userCompany: briefRequest.userCompany,
-            userBio: briefRequest.userBio
+            userBio: briefRequest.userBio,
+            app: app
         )
         
         return BriefResponse(brief: brief, prompt: prompt)
     }
     
-    // Enrich Person on Demand
+    // Enrich Person V2 - Centralized enrichment with caching
+    app.post("enrich-person-v2") { req async throws -> ParticipantEnrichmentService.EnrichmentOutput in
+        let enrichRequest = try req.content.decode(EnrichRequestV2.self)
+        
+        let input = ParticipantEnrichmentService.EnrichmentInput(
+            email: enrichRequest.email,
+            displayName: enrichRequest.displayName,
+            accessToken: enrichRequest.accessToken
+        )
+        
+        return await ParticipantEnrichmentService.shared.enrichParticipant(input: input, app: app)
+    }
+    
+    // Enrich Person on Demand (OLD - deprecated)
     // Enrich Person on Demand
     app.post("enrich-person") { req async throws -> EnrichResponse in
         let enrichRequest = try req.content.decode(EnrichRequest.self)
         let requestID = UUID().uuidString
         req.logger.info("[\(requestID)] Received enrich request for: \(enrichRequest.email)")
         
-        let result = await ServerResearchService.shared.processEnrichment(
+        let enriched = await ServerResearchService.shared.processEnrichment(
             name: enrichRequest.name, 
             email: enrichRequest.email
         )
         
-        if let co = result.companyName {
-             req.logger.info("[\(requestID)]    -> Company: \(co)")
+        // Build summary from separated fields
+        var summaryBuilder = ""
+        if let companyInfo = enriched.companyInfo {
+            summaryBuilder += "**Company Info**\n\(companyInfo)\n\n"
+        }
+        if let linkedInInfo = enriched.linkedInInfo {
+            summaryBuilder += "**LinkedIn Profile**\n\(linkedInInfo)"
         }
         
+        let researchSummary = summaryBuilder.isEmpty ? nil : summaryBuilder
+        
         return EnrichResponse(
-            companyName: result.companyName,
-            researchSummary: result.researchSummary,
+            companyName: enriched.companyName,
+            researchSummary: researchSummary,
             requestID: requestID,
-            linkedInTitle: result.linkedInTitle,
-            linkedInUrl: result.linkedInUrl
+            linkedInTitle: enriched.linkedInTitle,
+            linkedInUrl: enriched.linkedInUrl
         )
     }
 }
@@ -91,6 +112,13 @@ struct BriefResponse: Content {
 struct EnrichRequest: Codable {
     let name: String
     let email: String
+    let accessToken: String
+}
+
+// V2 Enrich Request
+struct EnrichRequestV2: Codable {
+    let email: String
+    let displayName: String?
     let accessToken: String
 }
 

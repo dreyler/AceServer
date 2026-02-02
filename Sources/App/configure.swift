@@ -8,6 +8,9 @@ public func configure(_ app: Application) throws {
     // register routes
     try routes(app)
     
+    // DISABLED: Background agent was wasting API quota by running every 60s
+    // Re-enable only for production with proper throttling (15+ min intervals)
+    /*
     // Start Background Agent Loop
     app.logger.info("🚀 AceServer Agent Starting...")
     
@@ -34,4 +37,5 @@ public func configure(_ app: Application) throws {
             }
         }
     }
+    */
 }

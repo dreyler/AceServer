@@ -9,6 +9,12 @@ struct GoogleSearchConfig {
 public class ServerResearchService {
     public static let shared = ServerResearchService()
     
+    // Personal email domains - should not be enriched
+    public static let personalDomains: Set<String> = [
+        "gmail.com", "yahoo.com", "hotmail.com", "outlook.com", 
+        "icloud.com", "aol.com", "protonmail.com", "me.com", "live.com"
+    ]
+    
     private init() {}
     
     public struct ResearchResult: Codable {
@@ -20,15 +26,23 @@ public class ServerResearchService {
     
     public struct EnrichmentResult {
         public let companyName: String?
-        public let researchSummary: String?
+        public let companyInfo: String?  // Company details only
+        public let linkedInInfo: String?  // LinkedIn profile only
         public let linkedInTitle: String?
         public let linkedInUrl: String?
     }
     
+    public actor ResearchCache {
+        private var cache: [String: GoogleSearchResponse] = [:]
+        public init() {}
+        public func get(_ query: String) -> GoogleSearchResponse? { return cache[query] }
+        public func set(_ query: String, response: GoogleSearchResponse) { cache[query] = response }
+    }
+
     // Unified logic used by both API and Agent
-    public func processEnrichment(name: String, email: String) async -> EnrichmentResult {
+    public func processEnrichment(name: String, email: String, cache: ResearchCache? = nil) async -> EnrichmentResult {
         // 1. Resolve via Server Logic
-        let research = await self.enrich(name: name, emailContext: email)
+        let research = await self.enrich(name: name, emailContext: email, cache: cache)
         
         // 2. Extract domain
         var domain = ""
@@ -49,20 +63,19 @@ public class ServerResearchService {
             }
         }
         
-        // Build summary
-        var summaryBuilder = ""
+        // Build separate company and LinkedIn info
+        var companyInfo: String?
+        var linkedInInfo: String?
         
         if let companyHit = research.first(where: { $0.source == "Company" }) {
-            summaryBuilder += "**Company Info**\n"
-            summaryBuilder += "\(companyHit.title)\n\(companyHit.snippet)\n[Source](\(companyHit.link))\n\n"
+            companyInfo = "\(companyHit.title)\n\(companyHit.snippet)\n[Source](\(companyHit.link))"
         }
         
         var linkedInTitle: String?
         var linkedInUrl: String?
         
         if let linkedInHit = research.first(where: { $0.source == "LinkedIn" }) {
-            summaryBuilder += "**LinkedIn Profile**\n"
-            summaryBuilder += "\(linkedInHit.title)\n\(linkedInHit.snippet)\n[Source](\(linkedInHit.link))"
+            linkedInInfo = "\(linkedInHit.title)\n\(linkedInHit.snippet)\n[Source](\(linkedInHit.link))"
             
             linkedInTitle = linkedInHit.title
             linkedInUrl = linkedInHit.link
@@ -73,21 +86,17 @@ public class ServerResearchService {
             }
         }
         
-        var researchSummary: String?
-        if !summaryBuilder.isEmpty {
-            researchSummary = summaryBuilder
-        }
-        
         return EnrichmentResult(
             companyName: companyName,
-            researchSummary: researchSummary,
+            companyInfo: companyInfo,
+            linkedInInfo: linkedInInfo,
             linkedInTitle: linkedInTitle,
             linkedInUrl: linkedInUrl
         )
     }
 
     // Finds LinkedIn profile and Company Info
-    public func enrich(name: String, companyContext: String? = nil, emailContext: String? = nil) async -> [ResearchResult] {
+    public func enrich(name: String, companyContext: String? = nil, emailContext: String? = nil, cache: ResearchCache? = nil) async -> [ResearchResult] {
         var results: [ResearchResult] = []
         
         // 1. Construct Queries
@@ -111,10 +120,14 @@ public class ServerResearchService {
         // PRE-SEARCH (Legacy): If context is empty, extract company from domain first.
         if companyContext == nil && !domain.isEmpty {
              print("   First: Searching for company using domain '\(domain)'")
-             if let coData = await performSearch(query: domain) {
-                 if let first = coData.items.first {
-                     let extractedName = _extractCompanyName(title: first.title, domain: domain)
-                     print("   🧠 Extracted Company Name: '\(extractedName)'")
+             if let coData = await performSearch(query: domain, cache: cache) {
+                 // CRITICAL FIX: Prioritize results whose link contains the actual domain
+                 let exactDomainMatch = coData.items.first { $0.link.contains(domain) }
+                 let selectedResult = exactDomainMatch ?? coData.items.first
+                 
+                 if let selectedResult = selectedResult {
+                     let extractedName = _extractCompanyName(title: selectedResult.title, domain: domain)
+                     print("   🧠 Extracted Company Name: '\(extractedName)' from \(selectedResult.link)")
                      if !extractedName.isEmpty {
                          context = extractedName
                      }
@@ -122,7 +135,6 @@ public class ServerResearchService {
              }
              
              }
-
 
         
         // FALLBACK (Global): If context is still domain (e.g. "madrona.com"),
@@ -142,7 +154,7 @@ public class ServerResearchService {
         
         var bestProfile: GoogleSearchResponse.Item? = nil
         
-        if let liData = await performSearch(query: liQuery) {
+        if let liData = await performSearch(query: liQuery, cache: cache) {
             // Filter for /in/
             let profiles = liData.items.filter { $0.link.contains("linkedin.com/in/") }
             
@@ -174,7 +186,7 @@ public class ServerResearchService {
                 
                 let fallbackQuery = "\(queryName) \(domain) linkedin"
                 
-                if let fbData = await performSearch(query: fallbackQuery) {
+                if let fbData = await performSearch(query: fallbackQuery, cache: cache) {
                     let fbProfiles = fbData.items.filter { $0.link.contains("linkedin.com/in/") }
                     
                     for profile in fbProfiles {
@@ -219,7 +231,7 @@ public class ServerResearchService {
              }
         }
         
-        if !companySearchQuery.isEmpty, let coData = await performSearch(query: companySearchQuery) {
+        if !companySearchQuery.isEmpty, let coData = await performSearch(query: companySearchQuery, cache: cache) {
              if let first = coData.items.first {
                  results.append(ResearchResult(
                     title: first.title, 
@@ -414,7 +426,13 @@ public class ServerResearchService {
         return segments.last
     }
 
-    public func performSearch(query: String) async -> GoogleSearchResponse? {
+    public func performSearch(query: String, cache: ResearchCache? = nil) async -> GoogleSearchResponse? {
+        // Check cache
+        if let cache = cache, let cached = await cache.get(query) {
+            print("[TRACE] ResearchService: ⚡️ Cache Hit for '\(query)'")
+            return cached
+        }
+        
         guard var components = URLComponents(string: "https://www.googleapis.com/customsearch/v1") else { return nil }
         
         components.queryItems = [
@@ -427,8 +445,9 @@ public class ServerResearchService {
         guard let url = components.url else { return nil }
         
         // Simple retry logic
-        for _ in 0..<2 {
+        for attempt in 0..<2 {
             do {
+                print("[TRACE] ResearchService: 🔍 Google Search API Query: '\(query)' (Attempt \(attempt+1))")
                 let (data, response) = try await URLSession.shared.data(from: url)
                 guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                     print("⚠️ CSE Error: \(String(data: data, encoding: .utf8) ?? "?")")
@@ -436,6 +455,8 @@ public class ServerResearchService {
                 }
                 
                 let result = try JSONDecoder().decode(GoogleSearchResponse.self, from: data)
+                // Write to cache
+                if let cache = cache { await cache.set(query, response: result) }
                 return result
                 
             } catch {
@@ -458,7 +479,7 @@ public class ServerResearchService {
     }
 
     // Helper: Extract company name from Title using Domain as verification
-    private func _extractCompanyName(title: String, domain: String) -> String {
+    public func _extractCompanyName(title: String, domain: String) -> String {
         let separators = CharacterSet(charactersIn: "-|:•·–—")
         let segments = title.components(separatedBy: separators).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         
