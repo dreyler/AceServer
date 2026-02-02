@@ -58,36 +58,6 @@ func routes(_ app: Application) throws {
     
     // Enrich Person on Demand (OLD - deprecated)
     // Enrich Person on Demand
-    app.post("enrich-person") { req async throws -> EnrichResponse in
-        let enrichRequest = try req.content.decode(EnrichRequest.self)
-        let requestID = UUID().uuidString
-        req.logger.info("[\(requestID)] Received enrich request for: \(enrichRequest.email)")
-        
-        let enriched = await ServerResearchService.shared.processEnrichment(
-            name: enrichRequest.name, 
-            email: enrichRequest.email
-        )
-        
-        // Build summary from separated fields
-        var summaryBuilder = ""
-        if let companyInfo = enriched.companyInfo {
-            summaryBuilder += "**Company Info**\n\(companyInfo)\n\n"
-        }
-        if let linkedInInfo = enriched.linkedInInfo {
-            summaryBuilder += "**LinkedIn Profile**\n\(linkedInInfo)"
-        }
-        
-        let researchSummary = summaryBuilder.isEmpty ? nil : summaryBuilder
-        
-        return EnrichResponse(
-            companyName: enriched.companyName,
-            researchSummary: researchSummary,
-            requestID: requestID,
-            linkedInTitle: enriched.linkedInTitle,
-            linkedInUrl: enriched.linkedInUrl
-        )
-    }
-    
     // Clear Cache
     app.post("cache", "clear") { req async throws -> HTTPStatus in
         app.logger.info("🗑️ Clearing caches requested by client")
@@ -115,24 +85,9 @@ struct BriefResponse: Content {
     let prompt: String
 }
 
-// Enrich Person DTOs
-struct EnrichRequest: Codable {
-    let name: String
-    let email: String
-    let accessToken: String
-}
-
 // V2 Enrich Request
 struct EnrichRequestV2: Codable {
     let email: String
     let displayName: String?
     let accessToken: String
-}
-
-struct EnrichResponse: Content {
-    let companyName: String?
-    let researchSummary: String?
-    let requestID: String
-    let linkedInTitle: String?
-    let linkedInUrl: String?
 }

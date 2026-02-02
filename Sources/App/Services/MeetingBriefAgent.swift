@@ -125,14 +125,14 @@ public struct MeetingBriefAgent {
         var userBioSection = ""
         if let bio = userBio, !bio.isEmpty {
             userBioSection = """
-            **You (The Meeting Owner)**:
+            **the logged in user**:
             - Name: \(userName) (\(userEmail))
             \(userTitle != nil ? "- Title: \(userTitle!)\n" : "")\(userCompany != nil ? "- Company: \(userCompany!)\n" : "")- Bio: \(bio)
             
             """
         } else {
             userBioSection = """
-            **You (The Meeting Owner)**:
+            **the logged in user**:
             - Name: \(userName) (\(userEmail))
             \(userTitle != nil ? "- Title: \(userTitle!)\n" : "")\(userCompany != nil ? "- Company: \(userCompany!)\n" : "")
             """

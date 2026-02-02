@@ -27,6 +27,8 @@ public class ParticipantEnrichmentService {
         public let company: String
         public let companyDetails: String?
         public let linkedInDetails: String?
+        public let linkedInTitle: String?
+        public let linkedInUrl: String?
         
         // Debug info
         public let cacheHit: Bool
@@ -52,6 +54,8 @@ public class ParticipantEnrichmentService {
                 company: "Unknown",
                 companyDetails: nil,
                 linkedInDetails: nil,
+                linkedInTitle: nil,
+                linkedInUrl: nil,
                 cacheHit: false,
                 wasInvalidated: false,
                 invalidationReason: nil
@@ -82,6 +86,8 @@ public class ParticipantEnrichmentService {
                     company: "Unknown",
                     companyDetails: nil,
                     linkedInDetails: nil,
+                    linkedInTitle: nil,
+                    linkedInUrl: nil,
                     cacheHit: false,
                     wasInvalidated: false,
                     invalidationReason: "Personal email domain"
@@ -119,6 +125,8 @@ public class ParticipantEnrichmentService {
                     company: cached.companyName ?? "Unknown",
                     companyDetails: cached.companyDetails,
                     linkedInDetails: cached.linkedInDetails,
+                    linkedInTitle: cached.linkedInTitle,
+                    linkedInUrl: cached.linkedInUrl,
                     cacheHit: true,
                     wasInvalidated: false,
                     invalidationReason: nil
@@ -188,6 +196,8 @@ public class ParticipantEnrichmentService {
                     company: "No company found",
                     companyDetails: nil,
                     linkedInDetails: nil,
+                    linkedInTitle: nil,
+                    linkedInUrl: nil,
                     cacheHit: false,
                     wasInvalidated: wasInvalidated,
                     invalidationReason: invalidationReason
@@ -195,6 +205,24 @@ public class ParticipantEnrichmentService {
             }
         } else {
             app.logger.info("   ✅ Using company from Google People: '\(companyName!)'")
+            
+            // Fix: Even if we have the name, we need the DETAILS (snippet/link)
+            // We can't rely on the email domain (since it might be gmail), so we search by Company Name
+            let companyQuery = companyName!
+            app.logger.trace("   🔍 Enriching company details for: '\(companyQuery)'")
+            let searchCache = ServerResearchService.ResearchCache()
+            
+            // Quick search to get details
+            if let searchResults = await ServerResearchService.shared.performSearch(query: companyQuery, cache: searchCache),
+               let result = searchResults.items.first {
+                   
+                companyDetails = """
+                **\(result.title)**
+                \(result.snippet)
+                [Source](\(result.link))
+                """
+                app.logger.info("   📝 Found details for \(companyName!)")
+            }
         }
         
         // Step 5: Search for LinkedIn profile (only if we have a valid name and company)
@@ -246,6 +274,8 @@ public class ParticipantEnrichmentService {
             company: companyName ?? "Unknown",
             companyDetails: companyDetails,
             linkedInDetails: linkedInDetails,
+            linkedInTitle: linkedInTitle,
+            linkedInUrl: linkedInUrl,
             cacheHit: false,
             wasInvalidated: wasInvalidated,
             invalidationReason: invalidationReason
