@@ -60,22 +60,7 @@ public class ParticipantEnrichmentService {
         
         let domain = email.split(separator: "@").last.map(String.init) ?? ""
         
-        // Step 1: Check if personal email - skip enrichment entirely
-        if ServerResearchService.personalDomains.contains(domain.lowercased()) {
-            app.logger.info("   ⏭️  Skipping personal email: \(email)")
-            return EnrichmentOutput(
-                email: email,
-                name: input.displayName ?? email.split(separator: "@").first.map(String.init) ?? "Unknown",
-                company: "Unknown",
-                companyDetails: nil,
-                linkedInDetails: nil,
-                cacheHit: false,
-                wasInvalidated: false,
-                invalidationReason: "Personal email domain"
-            )
-        }
-        
-        // Step 2: Call Google People API for latest data
+        // Step 1: Call Google People API first (to get potential company info even for gmail)
         app.logger.info("   📞 Calling Google People API...")
         let googlePeopleData = await ServerGooglePeopleService.shared.resolve(
             email: email,
@@ -86,6 +71,25 @@ public class ParticipantEnrichmentService {
         let currentCompany = googlePeopleData?.company
         
         app.logger.info("   👤 Google People: name='\(currentName)' company='\(currentCompany ?? "nil")'")
+
+        // Step 2: Check if personal email - skip ONLY if we didn't find a company in Google People
+        if ServerResearchService.personalDomains.contains(domain.lowercased()) {
+             if currentCompany == nil {
+                app.logger.info("   ⏭️  Skipping personal email (no company in contacts): \(email)")
+                return EnrichmentOutput(
+                    email: email,
+                    name: currentName,
+                    company: "Unknown",
+                    companyDetails: nil,
+                    linkedInDetails: nil,
+                    cacheHit: false,
+                    wasInvalidated: false,
+                    invalidationReason: "Personal email domain"
+                )
+             } else {
+                 app.logger.info("   ⚠️  Personal email '\(email)' has company in contacts: '\(currentCompany!)'. Continuing enrichment.")
+             }
+        }
         
         // Step 3: Check cache and invalidate if Google People data changed
         var wasInvalidated = false
@@ -246,5 +250,11 @@ public class ParticipantEnrichmentService {
             wasInvalidated: wasInvalidated,
             invalidationReason: invalidationReason
         )
+    }
+    
+    // Expose cache clearing
+    public func clearCache() async {
+        app.logger.warning("🗑️ Clearing enrichment cache")
+        await cache.clearAll()
     }
 }

@@ -87,6 +87,13 @@ func routes(_ app: Application) throws {
             linkedInUrl: enriched.linkedInUrl
         )
     }
+    
+    // Clear Cache
+    app.post("cache", "clear") { req async throws -> HTTPStatus in
+        app.logger.info("🗑️ Clearing caches requested by client")
+        await ParticipantEnrichmentService.shared.clearCache()
+        return .ok
+    }
 }
 // Helpers removed (now in Service)
 

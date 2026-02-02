@@ -29,8 +29,8 @@ public struct MeetingBriefAgent {
         // 1. Parse Participants & Enrich
         let attendees = meeting.attendees ?? []
         
-        // Limit to 20 participants for speed/cost
-        let maxParticipants = 20
+        // Limit to 50 participants (safe now with caching)
+        let maxParticipants = 50
         
         print("[TRACE] MeetingBriefAgent: 🚀 Processing \(attendees.count) attendees (Max \(maxParticipants))...")
         
