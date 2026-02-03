@@ -1,4 +1,5 @@
 import Vapor
+import VaporAPNS
 
 class ServerNotificationAgent {
     static let shared = ServerNotificationAgent()
@@ -6,7 +7,7 @@ class ServerNotificationAgent {
     // In-memory state
     private var currentLockScreenItemID: UUID?
     
-    func process(meetings: [Meeting], routines: [Routine], token: String, app: Application) async {
+    func process(meetings: [Meeting], routines: [Routine], userId: String, token: String, deviceToken: String?, context: UserSessionManager.UserContext?, app: Application) async {
         let now = Date()
         
         // 1. Candidate Generation
@@ -16,7 +17,7 @@ class ServerNotificationAgent {
         for meeting in meetings {
             for routine in routines where routine.isEnabled {
                 // Await the async evaluation (now includes AI generation)
-                if let candidate = await evaluate(routine: routine, meeting: meeting, token: token, now: now, app: app) {
+                if let candidate = await evaluate(routine: routine, meeting: meeting, userId: userId, token: token, context: context, now: now, app: app) {
                     app.logger.info("   -> Candidate Found: \(candidate.title) (Type: \(candidate.type))")
                     candidates.append(candidate)
                 }
@@ -46,7 +47,7 @@ class ServerNotificationAgent {
                 
                 // MOCKED PUSH
                 sendSilentClearPush(app: app)
-                sendVisiblePush(title: winner.title, body: winner.body, app: app)
+                sendVisiblePush(title: winner.title, body: winner.body, token: deviceToken, app: app)
                 
                 currentLockScreenItemID = winner.meeting.id
             }
@@ -66,13 +67,37 @@ class ServerNotificationAgent {
     
     private func sendSilentClearPush(app: Application) {
         app.logger.notice("🔔 [PUSH] [SILENT CLEAR] Sending request to clear lock screen...")
+        // TODO: Implement silent push to clear notifications if needed
     }
     
-    private func sendVisiblePush(title: String, body: String, app: Application) {
-        app.logger.notice("🔔 [PUSH] [VISIBLE] Title: '\(title)' Body: '\(body)'")
+    private func sendVisiblePush(title: String, body: String, token: String?, app: Application) {
+        guard let deviceToken = token else {
+            app.logger.warning("🔕 Cannot send push: No device token.")
+            return
+        }
+        
+        app.logger.notice("🔔 [PUSH] [VISIBLE] Sending to APNs: Title='\(title)'")
+        
+        do {
+            // Using standard alert payload
+            // Note: .sandbox environment is set in configure.swift
+            try app.apns.send(
+                .init(title: title, subtitle: nil, body: body),
+                to: deviceToken
+            ).whenComplete { result in
+                switch result {
+                case .success:
+                     app.logger.info("   ✅ Push sent successfully.")
+                case .failure(let error):
+                     app.logger.error("   ❌ Push failed: \(error)")
+                }
+            }
+        } catch {
+             app.logger.error("   ❌ Push dispatch error: \(error)")
+        }
     }
     
-    private func evaluate(routine: Routine, meeting: Meeting, token: String, now: Date, app: Application) async -> Candidate? {
+    private func evaluate(routine: Routine, meeting: Meeting, userId: String, token: String, context: UserSessionManager.UserContext?, now: Date, app: Application) async -> Candidate? {
         let calendar = Calendar.current
         
         if routine.type == .beforeMeeting {
@@ -81,11 +106,31 @@ class ServerNotificationAgent {
             if minutesUntilStart >= 0 && minutesUntilStart <= 720 {
                 
                 // TRIGGER AI GENERATION (Only if close enough)
-                // Optimization: Maybe only generate if < 60 mins? 
-                // For now, generate for all to test.
                 app.logger.info("🤖 Generating Brief for '\(meeting.title)'...")
-                // let result = await MeetingBriefAgent.generateBrief(meeting: meeting.googleEvent, accessToken: token, userEmail: "", userName: "", app: app)
-                let brief = "Auto-brief disabled"
+                
+                // Format Time using User's TimeZone Identifier (if provided)
+                var formattedTime: String? = nil
+                if let tzID = context?.localTime, let tz = TimeZone(identifier: tzID) {
+                     let formatter = DateFormatter()
+                     formatter.dateStyle = .medium
+                     formatter.timeStyle = .short
+                     formatter.timeZone = tz
+                     formattedTime = formatter.string(from: meeting.startTime)
+                }
+                
+                let result = await MeetingBriefAgent.generateBrief(
+                    meeting: meeting.googleEvent,
+                    accessToken: token,
+                    userEmail: userId, 
+                    userName: "User", // Defaults to generic if not captured
+                    userTitle: context?.title,
+                    userCompany: context?.company,
+                    userBio: context?.bio,
+                    userLocalTime: formattedTime,
+                    app: app
+                )
+                
+                let brief = result.brief
                 
                 return Candidate(
                     meeting: meeting,
@@ -109,6 +154,9 @@ class ServerNotificationAgent {
                 )
             }
         }
+        
+        return nil
+    }
         
         return nil
     }

@@ -5,35 +5,45 @@ import Vapor
 class UserSessionManager {
     static let shared = UserSessionManager()
     
-    // Key: UserID (Email or Unique ID), Value: Google Access Token
+    // User Context Storage
+    public struct UserContext {
+        let title: String?
+        let company: String?
+        let bio: String?
+        let localTime: String? // Last known local time format/zone string (or just passed on register)
+    }
+    
+    // Key: UserID, Value: UserContext
+    private var userContexts: [String: UserContext] = [:]
+    
     private var activeSessions: [String: String] = [:]
     private var usersRoutines: [String: [Routine]] = [:]
-    
-    // Key: UserID (Email or Unique ID), Value: deviceToken (Optional)
     private var userDeviceTokens: [String: String] = [:]
     
-    // Thread safety
     private let queue = DispatchQueue(label: "com.ace.sessionManager", attributes: .concurrent)
     
-    func register(userId: String, token: String, routines: [Routine], deviceToken: String?) {
+    func register(userId: String, token: String, routines: [Routine], deviceToken: String?, context: UserContext? = nil) {
         queue.async(flags: .barrier) {
             self.activeSessions[userId] = token
             self.usersRoutines[userId] = routines
             if let dt = deviceToken {
                 self.userDeviceTokens[userId] = dt
             }
-            print("✅ User Registered: \(userId) (DeviceToken: \(deviceToken != nil ? "Yes" : "No"))")
+            if let ctx = context {
+                self.userContexts[userId] = ctx
+            }
+            print("✅ User Registered: \(userId) (DeviceToken: \(deviceToken != nil ? "Yes" : "No"), Context: \(context != nil ? "Yes" : "No"))")
         }
     }
     
-    func getAllSessions() -> [(userId: String, token: String, routines: [Routine], deviceToken: String?)] {
+    func getAllSessions() -> [(userId: String, token: String, routines: [Routine], deviceToken: String?, context: UserContext?)] {
         return queue.sync {
             activeSessions.map { (inputs) in
                 let (userId, token) = inputs
-                // Default routines if missing (shouldn't happen with correct flow)
                 let routines = usersRoutines[userId] ?? []
                 let deviceToken = userDeviceTokens[userId]
-                return (userId, token, routines, deviceToken)
+                let context = userContexts[userId]
+                return (userId, token, routines, deviceToken, context)
             }
         }
     }

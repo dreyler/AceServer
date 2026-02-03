@@ -13,11 +13,20 @@ func routes(_ app: Application) throws {
     app.post("register") { req async throws -> HTTPStatus in
         let registerData = try req.content.decode(RegisterRequest.self)
         
+        // Extract context
+        let context = UserSessionManager.UserContext(
+            title: registerData.userTitle,
+            company: registerData.userCompany,
+            bio: registerData.userBio,
+            localTime: registerData.userLocalTime
+        )
+        
         UserSessionManager.shared.register(
             userId: registerData.userId,
             token: registerData.accessToken,
             routines: registerData.routines,
-            deviceToken: registerData.deviceToken
+            deviceToken: registerData.deviceToken,
+            context: context
         )
         
         return .ok
