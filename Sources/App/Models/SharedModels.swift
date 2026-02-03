@@ -24,6 +24,7 @@ public struct GoogleCalendarEvent: Codable {
     public var start: GoogleDate?
     public var end: GoogleDate?
     public var status: String?
+    public var organizer: GoogleOrganizer?
     public var attendees: [GoogleAttendee]?
 }
 
@@ -32,11 +33,18 @@ public struct GoogleDate: Codable {
     public var date: String?
 }
 
+public struct GoogleOrganizer: Codable {
+    public var email: String
+    public var displayName: String?
+}
+
 public struct GoogleAttendee: Codable {
     public var email: String
     public var displayName: String?
     public var responseStatus: String?
+    public var organizer: Bool? // Sometimes organizer flag is here too
 }
+
 
 struct Meeting: Codable {
     var id: UUID = UUID()

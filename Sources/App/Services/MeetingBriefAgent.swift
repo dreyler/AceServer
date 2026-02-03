@@ -164,6 +164,7 @@ public struct MeetingBriefAgent {
           <title>\(meeting.summary ?? "Unknown")</title>
           <date>\(meeting.start?.dateTime ?? "")</date>
           <description>\(meeting.description ?? "No description provided")</description>
+          <organizer>\(meeting.organizer?.displayName ?? meeting.organizer?.email ?? "Unknown")</organizer>
         </meeting_details>
         
         \(userBioSection)
