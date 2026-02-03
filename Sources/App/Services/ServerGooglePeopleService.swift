@@ -40,7 +40,18 @@ public class ServerGooglePeopleService {
             
             if let person = result.results?.first?.person {
                 let name = person.names?.first?.displayName ?? email
-                let company = person.organizations?.first?.name
+                var company: String? = nil
+                
+                if let orgs = person.organizations {
+                    print("[TRACE] Found \(orgs.count) organizations for \(email)")
+                    // Prioritize 'current' organization
+                    if let currentOrg = orgs.first(where: { $0.current == true }) {
+                        company = currentOrg.name
+                    } else {
+                        company = orgs.first?.name
+                    }
+                }
+                
                 return PersonInfo(name: name, company: company)
             }
             
@@ -67,5 +78,6 @@ public class ServerGooglePeopleService {
     }
     struct Org: Codable {
         let name: String?
+        let current: Bool?
     }
 }
