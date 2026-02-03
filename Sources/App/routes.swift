@@ -37,6 +37,7 @@ func routes(_ app: Application) throws {
             userTitle: briefRequest.userTitle,
             userCompany: briefRequest.userCompany,
             userBio: briefRequest.userBio,
+            userLocalTime: briefRequest.userLocalTime,
             app: app
         )
         
@@ -78,6 +79,7 @@ struct BriefRequest: Codable {
     let userTitle: String?
     let userCompany: String?
     let userBio: String?
+    let userLocalTime: String? // Formatted meeting time in user's timezone
 }
 
 struct BriefResponse: Content {

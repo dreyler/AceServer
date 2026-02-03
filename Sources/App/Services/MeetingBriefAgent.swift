@@ -21,6 +21,7 @@ public struct MeetingBriefAgent {
         userTitle: String? = nil,
         userCompany: String? = nil,
         userBio: String? = nil,
+        userLocalTime: String? = nil,
         app: Application
     ) async -> (brief: String, prompt: String) {
         
@@ -162,7 +163,7 @@ public struct MeetingBriefAgent {
         
         <meeting_details>
           <title>\(meeting.summary ?? "Unknown")</title>
-          <date>\(meeting.start?.dateTime ?? "")</date>
+          <date>\(userLocalTime ?? meeting.start?.dateTime ?? "")</date>
           <description>\(meeting.description ?? "No description provided")</description>
           <organizer>\(meeting.organizer?.displayName ?? meeting.organizer?.email ?? "Unknown")</organizer>
         </meeting_details>
