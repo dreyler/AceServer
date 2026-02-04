@@ -193,7 +193,11 @@ func routes(_ app: Application) throws {
 
                         // Extract Response JSON (Decisions)
                         let decisions = [];
+                        let isBriefGeneration = false;
+                        let briefDetails = {};
+                        
                         try {
+                            // MODE 1: JSON DECISIONS (Controller Agent)
                             const responseMarker = "RESPONSE:";
                             const responseStart = entryText.indexOf(responseMarker);
                             if (responseStart !== -1) {
@@ -202,11 +206,35 @@ func routes(_ app: Application) throws {
                                 const jsonEnd = responseText.lastIndexOf('}');
                                 if (jsonStart !== -1 && jsonEnd !== -1) {
                                     const jsonStr = responseText.substring(jsonStart, jsonEnd + 1);
-                                    const parsed = JSON.parse(jsonStr);
-                                    if (parsed.decisions) decisions = parsed.decisions;
+                                    try {
+                                        const parsed = JSON.parse(jsonStr);
+                                        if (parsed.decisions) decisions = parsed.decisions;
+                                    } catch(e) {}
                                 }
                             }
-                        } catch (e) { console.error('Failed to parse decisions', e); }
+                            
+                            // MODE 2: XML PROMPT (Brief Agent)
+                            const promptMarker = "PROMPT:";
+                            const pStart = entryText.indexOf(promptMarker);
+                            if (pStart !== -1 && decisions.length === 0) {
+                                const promptText = entryText.substring(pStart + promptMarker.length);
+                                
+                                if (promptText.includes('<meeting_details>')) {
+                                    isBriefGeneration = true;
+                                    
+                                    // Extract simple details via Regex
+                                    const titleMatch = promptText.match(/<title>(.*?)<\\/title>/);
+                                    const userMatch = promptText.match(/<logged_in_user>\\s*<name>(.*?)<\\/name>/s);
+                                    const dateMatch = promptText.match(/<date>(.*?)<\\/date>/);
+                                    
+                                    briefDetails = {
+                                        title: titleMatch ? titleMatch[1] : 'Unknown Meeting',
+                                        user: userMatch ? userMatch[1].trim() : 'Unknown User',
+                                        date: dateMatch ? dateMatch[1] : ''
+                                    };
+                                }
+                            }
+                        } catch (e) { console.error('Failed to parse decisions/brief', e); }
 
                         // Render
                         const dateOpts = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -282,6 +310,23 @@ func routes(_ app: Application) throws {
                             });
                             
                             html += `</tbody></table>`;
+                        } else if (isBriefGeneration) {
+                             // Render Brief Generation Card
+                             html += `<div style="background: #2b2b2b; padding: 15px; border-radius: 6px; border-left: 4px solid #c586c0;">
+                                <div style="font-weight:bold; color: #c586c0; margin-bottom: 8px;">📝 Meeting Brief Generated</div>
+                                <div style="display:flex; gap: 20px; align-items:center;">
+                                    <div>
+                                        <span style="color:#888; font-size:0.8em; text-transform:uppercase;">Meeting</span>
+                                        <div style="color:#fff; font-weight:600;">${briefDetails.title}</div>
+                                        <div style="color:#aaa; font-size:0.9em;">${briefDetails.date}</div>
+                                    </div>
+                                    <div style="border-left:1px solid #444; padding-left:20px;">
+                                        <span style="color:#888; font-size:0.8em; text-transform:uppercase;">User</span>
+                                        <div style="color:#fff;">${briefDetails.user}</div>
+                                    </div>
+                                </div>
+                             </div>`;
+                             
                         } else {
                             html += `<div style="padding:20px; text-align:center; color:#888;">⚠️ No structured decisions found or parsing failed. Check Raw Log.</div>`;
                         }

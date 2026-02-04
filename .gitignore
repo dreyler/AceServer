@@ -10,3 +10,7 @@
 
 # Logs
 *.log
+enrichment_validation_results.csv
+enrichment_validation_results_*
+enrichment_validation_results_2026-02-04_12-28-24.csv
+enrichment_validation_results.txt

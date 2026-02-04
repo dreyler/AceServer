@@ -69,6 +69,8 @@ struct Routine: Codable {
         case beforeMeeting = "Before Meeting Prep"
         case dontBeLate = "Don't Be Late"
         case afterMeeting = "After Meeting Actions"
+        case endOfDay = "End of Day Wrap Up"
+        case nextWeek = "Next Week Planning"
     }
     
     var id: UUID = UUID()

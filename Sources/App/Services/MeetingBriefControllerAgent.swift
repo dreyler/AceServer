@@ -92,13 +92,20 @@ class MeetingBriefControllerAgent {
     private func invokeAgent(userId: String, meetings: [Meeting], userPrompt: String, app: Application) async {
         // Prepare context
         // Simplified meeting list for token efficiency
-        let condensedMeetings = meetings.map { m in
+        let condensedMeetings = meetings.map { m -> [String: Any] in
             return [
                 "id": m.googleEvent.id ?? m.id.uuidString,
                 "title": m.title,
+                "description": m.meetingDescription ?? m.googleEvent.description ?? "",
                 "start": m.startTime.ISO8601Format(),
                 "organizer": m.organizer ?? "Unknown",
-                "participants": m.participants.count
+                "participants": (m.googleEvent.attendees ?? []).map { attendee in
+                    return [
+                        "email": attendee.email,
+                        "name": attendee.displayName ?? "",
+                        "status": attendee.responseStatus ?? "unknown"
+                    ]
+                }
             ]
         }
         
@@ -112,7 +119,11 @@ class MeetingBriefControllerAgent {
         USER PROMPT:
         "\(userPrompt)"
         
-        Here is the list of meetings that you might want to notify the user about:
+        Here is the list of meetings that you might want to notify the user about.
+        Each meeting includes title, description, and detailed participant list (email, status).
+        Use the participant email domains to determine if they are internal (e.g. same company) or external.
+        
+        MEETINGS:
         \(meetingsJson)
         
         You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
