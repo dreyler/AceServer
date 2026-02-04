@@ -233,23 +233,21 @@ public class ParticipantEnrichmentService {
         if currentName != "Unknown" && !currentName.contains("@") {
             app.logger.info("   🔍 Searching LinkedIn for: '\(currentName)' at '\(companyName!)'")
             
-            let linkedInQuery = "\(currentName) \(companyName!) linkedin"
-            let searchCache = ServerResearchService.ResearchCache()
-            if let linkedInResults = await ServerResearchService.shared.performSearch(query: linkedInQuery, cache: searchCache) {
-                // Simple matching: look for LinkedIn URL
-                for item in linkedInResults.items {
-                    if item.link.contains("linkedin.com/in/") {
-                        linkedInUrl = item.link
-                        linkedInTitle = item.title
-                        linkedInDetails = "**\(item.title)**\n\(item.snippet)"
-                        app.logger.info("   ✅ Found LinkedIn: \(item.link)")
-                        break
-                    }
-                }
-                
-                if linkedInUrl == nil {
-                    app.logger.warning("   ⚠️  No LinkedIn profile found")
-                }
+            // DELEGATE to unified Research Service which includes strict validation logic
+            let researchResults = await ServerResearchService.shared.enrich(
+                name: currentName,
+                companyContext: companyName,
+                emailContext: email
+            )
+            
+            // Extract verified LinkedIn result
+            if let linkedInHit = researchResults.first(where: { $0.source == "LinkedIn" }) {
+                linkedInUrl = linkedInHit.link
+                linkedInTitle = linkedInHit.title
+                linkedInDetails = "**\(linkedInHit.title)**\n\(linkedInHit.snippet)"
+                app.logger.info("   ✅ Found Verified LinkedIn: \(linkedInHit.link)")
+            } else {
+                app.logger.warning("   ⚠️  No valid LinkedIn profile found (Active Validation Logic applied)")
             }
         }
         

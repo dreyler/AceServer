@@ -303,6 +303,8 @@ public class ServerResearchService {
         let sLastStr = searchParts.last?.lowercased() ?? ""
         let rLastStr = resultParts.last?.lowercased() ?? ""
         
+        print("[DEBUG] Validate: Input='\(sFirstStr) \(sLastStr)' vs Result='\(rFirstStr) \(rLastStr)' (Title: '\(item.title)')")
+        
         // 1. First Name Check (2-char prefix)
         if sFirstStr.count >= 2 && rFirstStr.count >= 2 {
             let sPrefix = sFirstStr.prefix(2)
@@ -317,24 +319,24 @@ public class ServerResearchService {
             }
         }
         
-        // 2. Last Name Check (2-char prefix)
-        if sLastStr.count >= 2 && rLastStr.count >= 2 {
-            let sPrefix = sLastStr.prefix(2)
-            let rPrefix = rLastStr.prefix(2)
+        // 2. Last Name Check
+        // STRICT CHECK: Input Last Name must be a substring of the Profile Last Name
+        // This prevents "Oleson" matching "Olson" (where prefix matches but full string doesn't).
+        if sLastStr.count >= 2 {
+            // Check if result last name contains search last name
+            let hasSubstringMatch = rLastStr.contains(sLastStr)
             
-            if sPrefix != rPrefix {
-                // Check for containment (hyphenated names)
-                if rLastStr.contains(sLastStr) {
-                    // Allowed
-                } else if item.title.localizedCaseInsensitiveContains(sLastStr) {
-                    // Maiden/Alt name found in raw title
-                    return (true, "Match (Maiden/Alt Name Found in Title)")
+            if !hasSubstringMatch {
+                // Fallback: Check if the full Title contains the Last Name (e.g. Maiden names, Hyphenated middle parts)
+                // "Jane Smith Jones" title vs "Jane Smith" search
+                if item.title.localizedCaseInsensitiveContains(sLastStr) {
+                     // Allowed (found elsewhere in title)
                 } else {
-                    return (false, "Last name mismatch (strict 2-char): Expected '\(sPrefix)', got '\(rPrefix)'")
+                    return (false, "Last name mismatch: Search name '\(sLastStr)' is not in profile name '\(rLastStr)'")
                 }
             }
         } else {
-            // Fallback to 1 char
+            // Fallback to 1 char if very short
             if sLastStr.prefix(1) != rLastStr.prefix(1) {
                 return (false, "Last initial mismatch")
             }

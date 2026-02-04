@@ -65,7 +65,8 @@ public class GeminiService {
         
         request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
         
-        print("➡️ [Gemini] Sending Request to \(url.absoluteString)...")
+        let safeUrl = url.absoluteString.replacingOccurrences(of: GeminiConfig.apiKey, with: "REDACTED")
+        print("➡️ [Gemini] Sending Request to \(safeUrl)...")
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {

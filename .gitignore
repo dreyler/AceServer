@@ -7,3 +7,6 @@
 
 # Environment variables (contains secrets)
 .env
+
+# Logs
+*.log
