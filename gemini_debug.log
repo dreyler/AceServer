@@ -1,0 +1,2933 @@
+---
+TIMESTAMP: 2026-02-03T23:39:02Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","title":"Train to New York NY","organizer":"Imported"},{"organizer":"Imported","participants":1,"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","start":"2026-05-26T17:00:00Z"},{"start":"2026-02-04T18:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","participants":4,"title":"Zoom call"},{"start":"2026-03-05T22:30:00Z","organizer":"Imported","title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"},{"title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","participants":1,"id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported"},{"organizer":"Imported","participants":2,"start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"start":"2026-02-08T03:00:00Z","organizer":"Imported","participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"organizer":"Imported","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"organizer":"Imported","start":"2026-02-04T23:00:00Z","participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:40:09Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"organizer":"Imported","title":"Train to New York NY","start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","organizer":"Imported","participants":1,"id":"n74fn3tfmolnsni59a443cnjco"},{"start":"2026-02-04T18:30:00Z","organizer":"Imported","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"organizer":"Imported","participants":2,"start":"2026-03-05T22:30:00Z","title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"},{"title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","participants":1,"id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported"},{"start":"2026-02-19T22:30:00Z","organizer":"Imported","title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"start":"2026-02-08T03:00:00Z","organizer":"Imported","id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"title":"Dave Chappelle"},{"organizer":"Imported","participants":2,"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","start":"2026-02-05T22:30:00Z"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","title":"🌉South Park Commons Onboarding","organizer":"Imported"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","participants":2,"organizer":"Imported","start":"2026-02-04T23:00:00Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:47:40Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","organizer":"Imported"},{"title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","organizer":"Imported","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z"},{"organizer":"Imported","start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)","participants":1,"id":"tt6dc4dvm3vsouddcl51qjm914"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","participants":2,"organizer":"Imported","start":"2026-02-19T22:30:00Z","title":"Ted\/Dave"},{"organizer":"Imported","id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","participants":1},{"id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported","start":"2026-05-24T11:52:00Z","title":"Train to New York NY","participants":1},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","organizer":"Imported","id":"n74fn3tfmolnsni59a443cnjco","participants":1},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2,"start":"2026-02-05T22:30:00Z","title":"Ted\/Dave"},{"participants":2,"organizer":"Imported","start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:48:41Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":2,"organizer":"Imported","start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync"},{"organizer":"Imported","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1,"start":"2026-02-11T17:30:00Z","title":"🌉South Park Commons Onboarding"},{"title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","participants":4},{"id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported","start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)","participants":1},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","start":"2026-02-19T22:30:00Z","participants":2},{"id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle"},{"organizer":"Imported","start":"2026-05-24T11:52:00Z","title":"Train to New York NY","participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks"},{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","organizer":"Imported","participants":1,"start":"2026-05-26T17:00:00Z"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:51:36Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","organizer":"Imported","participants":2,"start":"2026-02-04T23:00:00Z"},{"organizer":"Imported","start":"2026-02-11T17:30:00Z","title":"🌉South Park Commons Onboarding","participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","participants":4,"organizer":"Imported","start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","participants":2},{"title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","organizer":"Imported","id":"4m8n739rko9lv9tgvsp9663b14","participants":1},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"start":"2026-05-24T11:52:00Z","title":"Train to New York NY"},{"participants":1,"organizer":"Imported","start":"2026-05-26T17:00:00Z","id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)"},{"organizer":"Imported","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2},{"title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","participants":2,"organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:52:36Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"organizer":"Imported"},{"organizer":"Imported","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"participants":4,"organizer":"Imported","start":"2026-02-04T18:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","participants":1,"start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)"},{"title":"Ted\/Dave","start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","participants":2},{"id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle","participants":1},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","start":"2026-05-24T11:52:00Z","participants":1},{"id":"n74fn3tfmolnsni59a443cnjco","participants":1,"organizer":"Imported","start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"organizer":"Imported","start":"2026-02-05T22:30:00Z","title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","participants":2,"start":"2026-03-05T22:30:00Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:53:36Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","organizer":"Imported","participants":2,"start":"2026-02-04T23:00:00Z"},{"organizer":"Imported","start":"2026-02-11T17:30:00Z","title":"🌉South Park Commons Onboarding","participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","participants":4,"organizer":"Imported","start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","participants":2},{"title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","organizer":"Imported","id":"4m8n739rko9lv9tgvsp9663b14","participants":1},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"start":"2026-05-24T11:52:00Z","title":"Train to New York NY"},{"participants":1,"organizer":"Imported","start":"2026-05-26T17:00:00Z","id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)"},{"organizer":"Imported","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2},{"title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","participants":2,"organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:54:38Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"organizer":"Imported"},{"organizer":"Imported","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"participants":4,"organizer":"Imported","start":"2026-02-04T18:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","participants":1,"start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)"},{"title":"Ted\/Dave","start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","participants":2},{"id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle","participants":1},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","start":"2026-05-24T11:52:00Z","participants":1},{"id":"n74fn3tfmolnsni59a443cnjco","participants":1,"organizer":"Imported","start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"organizer":"Imported","start":"2026-02-05T22:30:00Z","title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","participants":2,"start":"2026-03-05T22:30:00Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:58:01Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding","participants":1},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","start":"2026-03-05T22:30:00Z","title":"Ted\/Dave","organizer":"Imported"},{"id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","organizer":"Imported","participants":1},{"start":"2026-02-08T03:00:00Z","id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","participants":1,"organizer":"Imported"},{"organizer":"Imported","participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","title":"Train to New York NY"},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported"},{"title":"Zoom call","organizer":"Imported","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","participants":2,"organizer":"Imported","id":"2lh4ubabop6qqk0njcdqnd1g7n"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","participants":2,"organizer":"Imported"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-03T23:59:01Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","organizer":"Imported","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","start":"2026-03-05T22:30:00Z","title":"Ted\/Dave","participants":2,"organizer":"Imported"},{"title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","participants":1,"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914"},{"title":"Dave Chappelle","organizer":"Imported","participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z"},{"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"organizer":"Imported","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"start":"2026-02-04T18:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","participants":4,"organizer":"Imported"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","start":"2026-02-05T22:30:00Z","organizer":"Imported","title":"Ted\/Dave","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:00:00Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","organizer":"Imported"},{"start":"2026-03-05T22:30:00Z","organizer":"Imported","participants":2,"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"},{"id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","organizer":"Imported","participants":1,"start":"2026-05-22T14:00:00Z"},{"participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle"},{"id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported","participants":1,"title":"Train to New York NY","start":"2026-05-24T11:52:00Z"},{"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","start":"2026-05-26T17:00:00Z","organizer":"Imported","participants":1},{"organizer":"Imported","start":"2026-02-04T18:30:00Z","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"organizer":"Imported","participants":2,"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z","organizer":"Imported"},{"start":"2026-02-05T22:30:00Z","title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:00:59Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-11T17:30:00Z","title":"🌉South Park Commons Onboarding","participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-03-05T22:30:00Z","organizer":"Imported"},{"organizer":"Imported","participants":1,"title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","id":"tt6dc4dvm3vsouddcl51qjm914"},{"organizer":"Imported","start":"2026-02-08T03:00:00Z","participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","organizer":"Imported","participants":1},{"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported","participants":1,"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z"},{"participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","organizer":"Imported","start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","organizer":"Imported","participants":2,"start":"2026-02-04T23:00:00Z"},{"start":"2026-02-19T22:30:00Z","organizer":"Imported","participants":2,"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:03:02Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"title":"Dave Chappelle","organizer":"Imported","start":"2026-02-08T03:00:00Z"},{"organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","title":"Zoom call","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported"},{"participants":1,"title":"🌉South Park Commons Onboarding","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported"},{"participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","title":"Train to New York NY","organizer":"Imported"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-03-05T22:30:00Z"},{"participants":1,"start":"2026-05-22T14:00:00Z","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","organizer":"Imported"},{"organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","start":"2026-02-19T22:30:00Z","participants":2,"organizer":"Imported"},{"start":"2026-02-04T23:00:00Z","participants":2,"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:04:04Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-08T03:00:00Z","participants":1,"title":"Dave Chappelle","id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z","participants":4,"organizer":"Imported"},{"organizer":"Imported","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z"},{"participants":1,"start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","organizer":"Imported"},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","participants":1,"start":"2026-05-24T11:52:00Z"},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","start":"2026-03-05T22:30:00Z","title":"Ted\/Dave","organizer":"Imported"},{"participants":1,"title":"Flight to Boston (UA 1015)","id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z","organizer":"Imported"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"},{"organizer":"Imported","participants":2,"start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"title":"Michael\/Dave Sync","organizer":"Imported","start":"2026-02-04T23:00:00Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:05:05Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","participants":1,"organizer":"Imported","title":"Dave Chappelle"},{"participants":4,"title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"},{"organizer":"Imported","participants":1,"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","start":"2026-05-26T17:00:00Z"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","organizer":"Imported","start":"2026-02-11T17:30:00Z"},{"id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","organizer":"Imported"},{"participants":2,"title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"},{"start":"2026-05-22T14:00:00Z","organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","participants":1},{"title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","start":"2026-02-05T22:30:00Z","organizer":"Imported"},{"participants":2,"start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave"},{"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:06:05Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"title":"Dave Chappelle","organizer":"Imported","start":"2026-02-08T03:00:00Z"},{"organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","title":"Zoom call","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported"},{"participants":1,"title":"🌉South Park Commons Onboarding","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported"},{"participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","title":"Train to New York NY","organizer":"Imported"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-03-05T22:30:00Z"},{"participants":1,"start":"2026-05-22T14:00:00Z","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","organizer":"Imported"},{"organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","start":"2026-02-19T22:30:00Z","participants":2,"organizer":"Imported"},{"start":"2026-02-04T23:00:00Z","participants":2,"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:07:30Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","participants":1,"organizer":"Imported","title":"Dave Chappelle"},{"participants":4,"title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"},{"organizer":"Imported","participants":1,"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","start":"2026-05-26T17:00:00Z"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","organizer":"Imported","start":"2026-02-11T17:30:00Z"},{"id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","organizer":"Imported"},{"participants":2,"title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"},{"start":"2026-05-22T14:00:00Z","organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","participants":1},{"title":"Ted\/Dave","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","start":"2026-02-05T22:30:00Z","organizer":"Imported"},{"participants":2,"start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave"},{"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:08:01Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-08T03:00:00Z","participants":1,"title":"Dave Chappelle","id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z","participants":4,"organizer":"Imported"},{"organizer":"Imported","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z"},{"participants":1,"start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","organizer":"Imported"},{"organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","participants":1,"start":"2026-05-24T11:52:00Z"},{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","start":"2026-03-05T22:30:00Z","title":"Ted\/Dave","organizer":"Imported"},{"participants":1,"title":"Flight to Boston (UA 1015)","id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z","organizer":"Imported"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"},{"organizer":"Imported","participants":2,"start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"title":"Michael\/Dave Sync","organizer":"Imported","start":"2026-02-04T23:00:00Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:10:10Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","participants":2,"title":"Michael\/Dave Sync","organizer":"Imported"},{"organizer":"Imported","title":"Zoom call","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","organizer":"Imported","participants":1},{"participants":1,"start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"organizer":"Imported","id":"n74fn3tfmolnsni59a443cnjco","participants":1,"start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z"},{"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","participants":2,"start":"2026-03-05T22:30:00Z","organizer":"Imported"},{"participants":1,"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z"},{"start":"2026-02-08T03:00:00Z","id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","title":"Dave Chappelle"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:11:04Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"organizer":"Imported","title":"Michael\/Dave Sync"},{"participants":4,"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"start":"2026-05-24T11:52:00Z","organizer":"Imported"},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported","title":"🌉South Park Commons Onboarding","participants":1,"start":"2026-02-11T17:30:00Z"},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2,"start":"2026-02-05T22:30:00Z","title":"Ted\/Dave"},{"participants":2,"start":"2026-02-19T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","title":"Ted\/Dave"},{"start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","participants":2},{"organizer":"Imported","title":"Flight to Boston (UA 1015)","participants":1,"id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","participants":1,"title":"Dave Chappelle","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:12:05Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","participants":2,"title":"Michael\/Dave Sync","organizer":"Imported"},{"organizer":"Imported","title":"Zoom call","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","organizer":"Imported","participants":1},{"participants":1,"start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"organizer":"Imported","id":"n74fn3tfmolnsni59a443cnjco","participants":1,"start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z"},{"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","participants":2,"start":"2026-03-05T22:30:00Z","organizer":"Imported"},{"participants":1,"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z"},{"start":"2026-02-08T03:00:00Z","id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","title":"Dave Chappelle"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:13:07Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","participants":2,"organizer":"Imported","title":"Michael\/Dave Sync"},{"participants":4,"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"start":"2026-05-24T11:52:00Z","organizer":"Imported"},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported","title":"🌉South Park Commons Onboarding","participants":1,"start":"2026-02-11T17:30:00Z"},{"title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","participants":2,"start":"2026-02-05T22:30:00Z","title":"Ted\/Dave"},{"participants":2,"start":"2026-02-19T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","title":"Ted\/Dave"},{"start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","participants":2},{"organizer":"Imported","title":"Flight to Boston (UA 1015)","participants":1,"id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","participants":1,"title":"Dave Chappelle","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:14:07Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","participants":2,"title":"Michael\/Dave Sync","organizer":"Imported"},{"organizer":"Imported","title":"Zoom call","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","organizer":"Imported","participants":1},{"participants":1,"start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"organizer":"Imported","id":"n74fn3tfmolnsni59a443cnjco","participants":1,"start":"2026-05-26T17:00:00Z","title":"Flight to San Francisco (UA 1227)"},{"title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","organizer":"Imported","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z"},{"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","participants":2,"start":"2026-03-05T22:30:00Z","organizer":"Imported"},{"participants":1,"organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z"},{"start":"2026-02-08T03:00:00Z","id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","title":"Dave Chappelle"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:18:30Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","organizer":"Imported"},{"title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported","participants":1},{"organizer":"Imported","start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1,"title":"🌉South Park Commons Onboarding"},{"title":"Dave Chappelle","participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","organizer":"Imported"},{"participants":2,"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","start":"2026-02-19T22:30:00Z"},{"organizer":"Imported","title":"Zoom call","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"start":"2026-05-26T17:00:00Z","id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","participants":1,"organizer":"Imported"},{"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","organizer":"Imported","participants":2,"start":"2026-03-05T22:30:00Z"},{"participants":1,"start":"2026-05-24T11:52:00Z","title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:19:22Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"start":"2026-02-05T22:30:00Z","organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave"},{"start":"2026-05-22T14:00:00Z","organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","participants":1,"title":"Flight to Boston (UA 1015)"},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","organizer":"Imported","participants":1,"start":"2026-02-11T17:30:00Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","organizer":"Imported","start":"2026-02-08T03:00:00Z","participants":1},{"start":"2026-02-19T22:30:00Z","title":"Ted\/Dave","organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"organizer":"Imported","participants":4,"title":"Zoom call","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","start":"2026-02-04T18:30:00Z"},{"start":"2026-05-26T17:00:00Z","id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported","participants":1,"title":"Flight to San Francisco (UA 1227)"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","start":"2026-03-05T22:30:00Z","organizer":"Imported","title":"Ted\/Dave","participants":2},{"participants":1,"organizer":"Imported","title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z"},{"organizer":"Imported","id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:20:21Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","start":"2026-02-05T22:30:00Z","participants":2},{"participants":1,"organizer":"Imported","title":"Flight to Boston (UA 1015)","id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z"},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding","participants":1},{"start":"2026-02-08T03:00:00Z","id":"4m8n739rko9lv9tgvsp9663b14","organizer":"Imported","participants":1,"title":"Dave Chappelle"},{"organizer":"Imported","participants":2,"title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","start":"2026-02-19T22:30:00Z"},{"start":"2026-02-04T18:30:00Z","title":"Zoom call","organizer":"Imported","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"},{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","organizer":"Imported","start":"2026-05-26T17:00:00Z","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","participants":2,"start":"2026-03-05T22:30:00Z"},{"start":"2026-05-24T11:52:00Z","organizer":"Imported","id":"9ekpt3q2aq1pebm2tr6cr02pks","participants":1,"title":"Train to New York NY"},{"start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","title":"Michael\/Dave Sync"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:22:48Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":1,"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported","start":"2026-05-26T17:00:00Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","participants":2,"organizer":"Imported","start":"2026-02-05T22:30:00Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle"},{"participants":1,"title":"Flight to Boston (UA 1015)","organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z"},{"title":"Michael\/Dave Sync","participants":2,"start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"},{"participants":1,"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z"},{"participants":2,"title":"Ted\/Dave","organizer":"Imported","start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:23:49Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","organizer":"Imported","start":"2026-05-26T17:00:00Z","participants":1},{"title":"Ted\/Dave","participants":2,"start":"2026-02-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","participants":1,"organizer":"Imported"},{"id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","organizer":"Imported","participants":1},{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","organizer":"Imported","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"start":"2026-02-19T22:30:00Z","participants":2,"title":"Ted\/Dave","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:24:49Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","organizer":"Imported","participants":1},{"start":"2026-02-05T22:30:00Z","participants":2,"title":"Ted\/Dave","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","organizer":"Imported","title":"Dave Chappelle"},{"id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported","participants":1,"start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)"},{"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2},{"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","participants":4},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","participants":1,"organizer":"Imported"},{"title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","start":"2026-03-05T22:30:00Z","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:27:06Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"organizer":"Imported","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","participants":1},{"start":"2026-05-26T17:00:00Z","organizer":"Imported","participants":1,"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)"},{"start":"2026-02-19T22:30:00Z","organizer":"Imported","title":"Ted\/Dave","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","participants":2},{"start":"2026-03-05T22:30:00Z","organizer":"Imported","participants":2,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave"},{"organizer":"Imported","start":"2026-05-22T14:00:00Z","id":"tt6dc4dvm3vsouddcl51qjm914","participants":1,"title":"Flight to Boston (UA 1015)"},{"id":"9ekpt3q2aq1pebm2tr6cr02pks","title":"Train to New York NY","participants":1,"organizer":"Imported","start":"2026-05-24T11:52:00Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-02-05T22:30:00Z","organizer":"Imported"},{"participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle","organizer":"Imported"},{"id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","title":"Michael\/Dave Sync","organizer":"Imported","participants":2},{"title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","participants":4,"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:32:44Z
+PROMPT:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"title":"test meeting","participants":0,"start":"2026-02-04T03:30:00Z","id":"5mfl9ng8rfp6ttlglad162gimm","organizer":"Imported"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+
+RESPONSE:
+{
+  "decisions": [
+    {
+      "meetingId": "5mfl9ng8rfp6ttlglad162gimm",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-04T03:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+--------------------------------------------------
+---
+TIMESTAMP: 2026-02-04T00:33:20Z
+PROMPT:
+You are an executive assistant helping the user prepare for a meeting. Construct a pre-meeting brief to help the user prepare for the meeting
+
+<meeting_details>
+  <title>Nick / Dave startup chat</title>
+  <date>Feb 3, 2026 at 9:00 AM</date>
+  <description>chat about Dave's startup idea which is about personal AI productivity for the workplace (Dave knows Charlotte)</description>
+  <organizer>dreyler@gmail.com</organizer>
+</meeting_details>
+
+<logged_in_user>
+  <name>Dave Eyler</name>
+  <email>dreyler@gmail.com</email>
+</logged_in_user>
+
+<participants>
+<participants_from_known_companies>
+  <company>
+    <company_name>Sky UK</company_name>
+    <company_details>
+**Sky UK - Wikipedia**
+Sky is a British broadcaster and telecommunications company that provides television, broadband internet, fixed line and mobile telephone services
+[Source](https://en.wikipedia.org/wiki/Sky_UK)
+    </company_details>
+    <people>
+      <person>
+        <email>nicholas.sarkissian@sky.uk</email>
+        <name>Nick Sarkissian</name>
+        <research>
+**Nick Sarkissian - Sky - LinkedIn**
+Nick Sarkissian. Sky Leeds Metropolitan University. Newbury, England, United Kingdom. 1K followers 500+ connections. See your mutual connections ...
+        </research>
+      </person>
+    </people>
+  </company>
+</participants_from_known_companies>
+
+</participants>
+
+Rules:
+1. In general, use your own knowledge as well as the provided context to provide the best meeting brief
+2. However, there is a section labeled <participants_from_unknown_companies>, and you should not use your own knowledge or attempt to guess about this information as you are likely to guess wrong and provide incorrect information
+3. Make sure not to get confused and think that the logged in user is a participant
+4. Don't provide company information about the company that the logged in user works at
+5. Include company details, such as strategy and recent news, but not about anything in <participants_from_unknown_companies>
+6. End with 1 short, strategic suggestion for the user to ask you a follow up question get more prepared for the meeting. put this question, but not the whole response, in italics
+7. The brief must fit on single iPhone screen (no scrolling), and be dense with value.
+
+RESPONSE:
+**Meeting Brief: Nick Sarkissian (Sky)**
+**Feb 3, 2026 | 9:00 AM**
+
+**Objective:** Pitch your AI productivity startup and seek enterprise feedback/introductions via your mutual connection, Charlotte.
+
+**The Participant**
+*   **Nick Sarkissian:** Senior leader at Sky (Leeds Metropolitan alum). Highly connected (1k+ followers). 
+*   **Connection:** Mutual friend Charlotte is your "warm start."
+
+**Company Context: Sky UK**
+*   **Profile:** UK’s leading broadcaster/telecom (owned by Comcast).
+*   **Strategy:** Currently undergoing a "Digital First" transformation, moving from legacy hardware to streaming-led services.
+*   **Opportunity:** With 30,000+ employees, Sky is a prime environment for AI productivity tools. They are actively seeking ways to use AI to streamline internal operations and content delivery.
+
+**Strategic Tactics**
+1.  **The Hook:** Start by mentioning Charlotte to build immediate rapport.
+2.  **The Angle:** Position your tool as a solution for "Enterprise Context Switching"—a major pain point for Sky’s massive, matrixed workforce. 
+3.  **The Ask:** Ask Nick how Sky currently handles internal information silos to see if your tool fits their roadmap.
+
+*Would you like me to draft a 30-second elevator pitch that specifically bridges your connection with Charlotte to your startup’s value proposition?*
+--------------------------------------------------

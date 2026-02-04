@@ -19,6 +19,7 @@ struct Person: Codable {
 
 // Google API Models
 public struct GoogleCalendarEvent: Codable {
+    public var id: String? // Stable GOOGLE ID
     public var summary: String?
     public var description: String?
     public var start: GoogleDate?
@@ -42,7 +43,7 @@ public struct GoogleAttendee: Codable {
     public var email: String
     public var displayName: String?
     public var responseStatus: String?
-    public var organizer: Bool? // Sometimes organizer flag is here too
+    public var organizer: Bool?
 }
 
 
@@ -73,7 +74,8 @@ struct Routine: Codable {
     var id: UUID = UUID()
     var type: RoutineType
     var isEnabled: Bool = true
-    var routineDescription: String // NL Configuration
+    var routineDescription: String // NL Configuration (Description)
+    var customPrompt: String? // User-defined prompt for the Agent
 }
 
 struct AceNotification: Codable {
@@ -92,6 +94,13 @@ struct AceNotification: Codable {
 struct RegisterRequest: Codable {
     let userId: String // Email usually
     let accessToken: String
+    let refreshToken: String?
     let routines: [Routine]
     let deviceToken: String? // Hex string of APNs token
+    
+    // User Context for Background processing
+    let userTitle: String?
+    let userCompany: String?
+    let userBio: String?
+    let userLocalTime: String?
 }

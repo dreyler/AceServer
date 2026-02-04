@@ -1,0 +1,384 @@
+Building for debugging...
+[0/3] Write swift-version--1AB21518FC5DEDBE.txt
+Build of product 'App' complete! (0.33s)
+[ WARNING ] ⚠️ APNs Key not found at /Users/davideyler/.gemini/antigravity/scratch/AceServer/AuthKey.p8. Push notifications will be simulated.
+[ INFO ] 🚀 AceServer Controller Agent Starting...
+[ NOTICE ] Server started on http://127.0.0.1:8080
+[ INFO ] ⏰ [Controller] Tick - Checking Users...
+[ INFO ] POST /register [request-id: 1BD68549-C262-49C8-9035-6C02160F5BD2]
+✅ User Registered: dreyler@gmail.com (DeviceToken: No, RefreshToken: Yes)
+[ INFO ] ⏰ [Controller] Tick - Checking Users...
+[ INFO ]    [Sync State] User: dreyler@gmail.com | Token: NIL
+[ INFO ] 📅 Syncing Calendar Page... (IsIncremental=false, PageToken=false) URL: https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&timeMin=2026-02-04T00:22:24Z&orderBy=startTime
+[ INFO ]    -> Page contained 10 meetings.
+[ INFO ]    Inbox: 10 changed events for dreyler@gmail.com.
+[ WARNING ]    ⚠️ No Next Sync Token returned from Google!
+[ INFO ]    🤖 Invoking Gemini for 10 meetings...
+[ INFO ] 🛑 [DEBUG] Gemini Prompt:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"participants":1,"title":"Flight to San Francisco (UA 1227)","id":"n74fn3tfmolnsni59a443cnjco","organizer":"Imported","start":"2026-05-26T17:00:00Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z","title":"Ted\/Dave","participants":2,"organizer":"Imported","start":"2026-02-05T22:30:00Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","participants":1,"organizer":"Imported","start":"2026-02-08T03:00:00Z","title":"Dave Chappelle"},{"participants":1,"title":"Flight to Boston (UA 1015)","organizer":"Imported","id":"tt6dc4dvm3vsouddcl51qjm914","start":"2026-05-22T14:00:00Z"},{"title":"Michael\/Dave Sync","participants":2,"start":"2026-02-04T23:00:00Z","id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"},{"participants":1,"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z","title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z"},{"participants":2,"title":"Ted\/Dave","organizer":"Imported","start":"2026-03-05T22:30:00Z","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z"}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+➡️ [Gemini] Sending Request to https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=AIzaSyDKyDfl4qwO87dZmZ2GcmVtLzwsnr3zLPQ...
+[ INFO ] GET /debug/gemini [request-id: 7F67B093-AC91-4E9D-8ADB-BBCE1DC5F75C]
+[ INFO ] GET /debug/gemini [request-id: 3C65592F-9B5A-452A-BCBC-7947D6618916]
+[ INFO ] GET /debug/gemini [request-id: C1B550F2-4F72-4C67-B923-D045F1D5170F]
+[ INFO ] GET /debug/gemini [request-id: 2FDB3F80-D942-45CB-9488-A406025CBED8]
+[ INFO ] GET /debug/gemini [request-id: 6736A960-50BB-4C2A-8ADC-DE184AA9944D]
+[ INFO ] GET /debug/gemini [request-id: 7B51A1DD-CBB6-4F41-8FAA-C13CAA9C3800]
+🛑 [DEBUG] Gemini Response:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+[ INFO ]    🤖 Agent Decisions: 10
+[ INFO ]       Clearing notification for 'n74fn3tfmolnsni59a443cnjco'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z' for 2026-02-05 22:20:00 +0000
+[ INFO ]       Clearing notification for '4m8n739rko9lv9tgvsp9663b14'
+[ INFO ]       Clearing notification for 'tt6dc4dvm3vsouddcl51qjm914'
+[ INFO ]       Scheduling '2lh4ubabop6qqk0njcdqnd1g7n' for 2026-02-04 22:50:00 +0000
+[ INFO ]       Clearing notification for '9ekpt3q2aq1pebm2tr6cr02pks'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0' for 2026-02-04 18:20:00 +0000
+[ INFO ]       Clearing notification for 'akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z' for 2026-02-19 22:20:00 +0000
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z' for 2026-03-05 22:20:00 +0000
+[ INFO ] GET /debug/gemini [request-id: 9EB48E58-F0E9-4546-8245-DCEA85D219FB]
+[ INFO ] GET /debug/gemini [request-id: 29690D17-3013-4CB7-86E6-CB1058EDB94E]
+[ INFO ] GET /debug/gemini [request-id: 1391D62D-775F-4CF5-B7EF-888C70D88C1A]
+[ INFO ] ⏰ [Controller] Tick - Checking Users...
+[ INFO ]    [Sync State] User: dreyler@gmail.com | Token: NIL
+[ INFO ] 📅 Syncing Calendar Page... (IsIncremental=false, PageToken=false) URL: https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&timeMin=2026-02-04T00:23:24Z&orderBy=startTime
+[ INFO ]    -> Page contained 10 meetings.
+[ INFO ]    Inbox: 10 changed events for dreyler@gmail.com.
+[ WARNING ]    ⚠️ No Next Sync Token returned from Google!
+[ INFO ]    🤖 Invoking Gemini for 10 meetings...
+[ INFO ] 🛑 [DEBUG] Gemini Prompt:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","organizer":"Imported","start":"2026-05-26T17:00:00Z","participants":1},{"title":"Ted\/Dave","participants":2,"start":"2026-02-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","participants":1,"organizer":"Imported"},{"id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","organizer":"Imported","participants":1},{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","organizer":"Imported","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"start":"2026-02-19T22:30:00Z","participants":2,"title":"Ted\/Dave","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+➡️ [Gemini] Sending Request to https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=AIzaSyDKyDfl4qwO87dZmZ2GcmVtLzwsnr3zLPQ...
+[ INFO ] GET /debug/gemini [request-id: 966A0A4D-68D3-4FAA-B125-4BBF7C81861D]
+[ INFO ] GET /debug/gemini [request-id: 973FD97D-580D-42F5-8D8B-4AD60CE0DD32]
+[ INFO ] GET /debug/gemini [request-id: E3C1747E-AF96-4B03-B9F2-84872A9104B3]
+🛑 [DEBUG] Gemini Response:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+[ INFO ]    🤖 Agent Decisions: 10
+[ INFO ]       Clearing notification for 'n74fn3tfmolnsni59a443cnjco'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z' for 2026-02-05 22:20:00 +0000
+[ INFO ]       Clearing notification for '4m8n739rko9lv9tgvsp9663b14'
+[ INFO ]       Clearing notification for 'tt6dc4dvm3vsouddcl51qjm914'
+[ INFO ]       Scheduling '2lh4ubabop6qqk0njcdqnd1g7n' for 2026-02-04 22:50:00 +0000
+[ INFO ]       Clearing notification for '9ekpt3q2aq1pebm2tr6cr02pks'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0' for 2026-02-04 18:20:00 +0000
+[ INFO ]       Clearing notification for 'akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z' for 2026-02-19 22:20:00 +0000
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z' for 2026-03-05 22:20:00 +0000
+[ INFO ] GET /debug/gemini [request-id: 6FE30D93-9231-4BD3-8F2B-83DEA80168A7]
+[ INFO ] GET /debug/gemini [request-id: 6A3B580B-664B-46AE-AB22-A76AC002ECA4]
+[ INFO ] GET /debug/gemini [request-id: 02D34D3B-72E8-4422-B659-D809CEEA81E0]
+[ INFO ] GET /debug/gemini [request-id: 73203522-AF8C-42A9-8491-725EF1395589]
+[ INFO ] ⏰ [Controller] Tick - Checking Users...
+[ INFO ]    [Sync State] User: dreyler@gmail.com | Token: NIL
+[ INFO ] 📅 Syncing Calendar Page... (IsIncremental=false, PageToken=false) URL: https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&timeMin=2026-02-04T00:24:24Z&orderBy=startTime
+[ INFO ]    -> Page contained 10 meetings.
+[ INFO ]    Inbox: 10 changed events for dreyler@gmail.com.
+[ WARNING ]    ⚠️ No Next Sync Token returned from Google!
+[ INFO ]    🤖 Invoking Gemini for 10 meetings...
+[ INFO ] 🛑 [DEBUG] Gemini Prompt:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","start":"2026-05-26T17:00:00Z","organizer":"Imported","participants":1},{"start":"2026-02-05T22:30:00Z","participants":2,"title":"Ted\/Dave","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"participants":1,"id":"4m8n739rko9lv9tgvsp9663b14","start":"2026-02-08T03:00:00Z","organizer":"Imported","title":"Dave Chappelle"},{"id":"tt6dc4dvm3vsouddcl51qjm914","organizer":"Imported","participants":1,"start":"2026-05-22T14:00:00Z","title":"Flight to Boston (UA 1015)"},{"title":"Michael\/Dave Sync","id":"2lh4ubabop6qqk0njcdqnd1g7n","start":"2026-02-04T23:00:00Z","organizer":"Imported","participants":2},{"title":"Train to New York NY","start":"2026-05-24T11:52:00Z","participants":1,"id":"9ekpt3q2aq1pebm2tr6cr02pks","organizer":"Imported"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","title":"Zoom call","start":"2026-02-04T18:30:00Z","organizer":"Imported","participants":4},{"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","title":"🌉South Park Commons Onboarding","start":"2026-02-11T17:30:00Z","participants":1,"organizer":"Imported"},{"title":"Ted\/Dave","participants":2,"start":"2026-02-19T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","organizer":"Imported","start":"2026-03-05T22:30:00Z","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").
+➡️ [Gemini] Sending Request to https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=AIzaSyDKyDfl4qwO87dZmZ2GcmVtLzwsnr3zLPQ...
+🛑 [DEBUG] Gemini Response:
+{
+  "decisions": [
+    {
+      "meetingId": "n74fn3tfmolnsni59a443cnjco",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-26T16:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-05T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "4m8n739rko9lv9tgvsp9663b14",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-08T02:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "tt6dc4dvm3vsouddcl51qjm914",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-22T13:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "2lh4ubabop6qqk0njcdqnd1g7n",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T22:50:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "9ekpt3q2aq1pebm2tr6cr02pks",
+      "shouldNotify": false,
+      "notificationTime": "2026-05-24T11:42:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-04T18:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z",
+      "shouldNotify": false,
+      "notificationTime": "2026-02-11T17:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-02-19T22:20:00Z",
+      "notificationType": "silent"
+    },
+    {
+      "meetingId": "_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z",
+      "shouldNotify": true,
+      "notificationTime": "2026-03-05T22:20:00Z",
+      "notificationType": "silent"
+    }
+  ]
+}
+[ INFO ]    🤖 Agent Decisions: 10
+[ INFO ]       Clearing notification for 'n74fn3tfmolnsni59a443cnjco'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z' for 2026-02-05 22:20:00 +0000
+[ INFO ]       Clearing notification for '4m8n739rko9lv9tgvsp9663b14'
+[ INFO ]       Clearing notification for 'tt6dc4dvm3vsouddcl51qjm914'
+[ INFO ]       Scheduling '2lh4ubabop6qqk0njcdqnd1g7n' for 2026-02-04 22:50:00 +0000
+[ INFO ]       Clearing notification for '9ekpt3q2aq1pebm2tr6cr02pks'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0' for 2026-02-04 18:20:00 +0000
+[ INFO ]       Clearing notification for 'akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z'
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z' for 2026-02-19 22:20:00 +0000
+[ INFO ]       Scheduling '_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z' for 2026-03-05 22:20:00 +0000
+[ INFO ] ⏰ [Controller] Tick - Checking Users...
+[ INFO ]    [Sync State] User: dreyler@gmail.com | Token: NIL
+[ INFO ] 📅 Syncing Calendar Page... (IsIncremental=false, PageToken=false) URL: https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&timeMin=2026-02-04T00:25:24Z&orderBy=startTime
+[ INFO ]    -> Page contained 10 meetings.
+[ INFO ]    Inbox: 10 changed events for dreyler@gmail.com.
+[ WARNING ]    ⚠️ No Next Sync Token returned from Google!
+[ INFO ]    🤖 Invoking Gemini for 10 meetings...
+[ INFO ] 🛑 [DEBUG] Gemini Prompt:
+You are an intelligent agent that decides when to trigger meeting briefs for users.
+Users have provided the context below on which meetings they want to be notified about.
+
+USER PROMPT:
+"Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
+
+Here is the list of meetings that you might want to notify the user about:
+[{"id":"n74fn3tfmolnsni59a443cnjco","title":"Flight to San Francisco (UA 1227)","organizer":"Imported","start":"2026-05-26T17:00:00Z","participants":1},{"title":"Ted\/Dave","participants":2,"start":"2026-02-05T22:30:00Z","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260205T223000Z"},{"id":"4m8n739rko9lv9tgvsp9663b14","title":"Dave Chappelle","start":"2026-02-08T03:00:00Z","participants":1,"organizer":"Imported"},{"id":"tt6dc4dvm3vsouddcl51qjm914","title":"Flight to Boston (UA 1015)","start":"2026-05-22T14:00:00Z","organizer":"Imported","participants":1},{"title":"Michael\/Dave Sync","start":"2026-02-04T23:00:00Z","participants":2,"id":"2lh4ubabop6qqk0njcdqnd1g7n","organizer":"Imported"},{"title":"Train to New York NY","id":"9ekpt3q2aq1pebm2tr6cr02pks","start":"2026-05-24T11:52:00Z","organizer":"Imported","participants":1},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g6go30d2360p32ca274qk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g6t142g9l6cq36e1i84qjagpk6h0kcdq360q42di168s48cpj6gr0","organizer":"Imported","participants":4,"start":"2026-02-04T18:30:00Z","title":"Zoom call"},{"participants":1,"id":"akgscgmkuv4lh67hs62tr1mn02_20260211T173000Z","start":"2026-02-11T17:30:00Z","organizer":"Imported","title":"🌉South Park Commons Onboarding"},{"start":"2026-02-19T22:30:00Z","participants":2,"title":"Ted\/Dave","organizer":"Imported","id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260219T223000Z"},{"id":"_60q30c1g60o30e1i60o4ac1g60rj8gpl88rj2c1h84s34h9g60s30c1g60o30c1g64o3acpi8opjechm68pk8gpg64o30c1g60o30c1g60o30c1g60o32c1g60o30c1g610k4d9j852j8d267123gh1k75134d9k8op3eh1l74s44dpp8ko0_20260305T223000Z","title":"Ted\/Dave","start":"2026-03-05T22:30:00Z","organizer":"Imported","participants":2}]
+
+You need to respond with which meetings should be sent to the MeetingBriefAgent to generate the brief, as well as what time the notification should be sent and what type of notification to send.
+
+Respond ONLY with a JSON object following this schema:
+{
+  "decisions": [
+    {
+      "meetingId": "ID from list",
+      "shouldNotify": true/false,
+      "notificationTime": "ISO8601 Date String (e.g. 2024-02-03T10:00:00Z)",
+      "notificationType": "silent" or "active"
+    }
+  ]
+}
+If a notification should be deleted or not sent, set shouldNotify to false.
+For notificationTime, calculate the absolute time based on the user prompt (e.g. "10 mins before").

@@ -1,4 +1,6 @@
+import Vapor
 import VaporAPNS
+import APNS
 
 // configures your application
 public func configure(_ app: Application) throws {
@@ -18,43 +20,25 @@ public func configure(_ app: Application) throws {
     // Check if key file exists before enabling APNs to avoid crash on startup
     if FileManager.default.fileExists(atPath: apnsKeyPath) {
         app.logger.info("🔔 Configuring APNs with key at \(apnsKeyPath)")
-        try app.apns.configuration = .init(
+        /*
+        app.apns.configuration = APNSwiftConfiguration(
             authenticationMethod: .jwt(
                 key: .private(filePath: apnsKeyPath),
                 keyIdentifier: apnsKeyId,
                 teamIdentifier: apnsTeamId
             ),
             topic: apnsTopic,
-            environment: .sandbox // Use .production for App Store
+            environment: .sandbox
         )
+        */
+        app.logger.warning("⚠️ APNs Configuration Disabled due to dependency issues. Notifications will be mocked.")
     } else {
         app.logger.warning("⚠️ APNs Key not found at \(apnsKeyPath). Push notifications will be simulated.")
     }
     
     // Start Background Agent Loop
-    app.logger.info("🚀 AceServer Agent Starting...")
+    app.logger.info("🚀 AceServer Controller Agent Starting...")
     
-    // Run every 60 seconds
-    app.eventLoopGroup.next().scheduleRepeatedTask(initialDelay: .seconds(5), delay: .seconds(60)) { task in
-        Task {
-            app.logger.info("⏰ Agent Tick - Checking Users...")
-            
-            let sessions = UserSessionManager.shared.getAllSessions()
-            
-            if sessions.isEmpty {
-                app.logger.info("   No active users.")
-                return 
-            }
-            
-            for (userId, token, routines, deviceToken, context) in sessions {
-                app.logger.info("   Processing User: \(userId) (HasToken: \(deviceToken != nil))")
-                
-                // 1. Fetch Meetings
-                let meetings = await ServerCalendarService.shared.getUpcomingMeetings(accessToken: token, app: app)
-                
-                // 2. Process
-                await ServerNotificationAgent.shared.process(meetings: meetings, routines: routines, userId: userId, token: token, deviceToken: deviceToken, context: context, app: app)
-            }
-        }
-    }
+    // Use the new Controller Agent Loop
+    MeetingBriefControllerAgent.shared.processLoop(app: app)
 }

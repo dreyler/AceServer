@@ -17,14 +17,18 @@ class UserSessionManager {
     private var userContexts: [String: UserContext] = [:]
     
     private var activeSessions: [String: String] = [:]
+    private var refreshTokens: [String: String] = [:] // NEW: Store Refresh Tokens
     private var usersRoutines: [String: [Routine]] = [:]
     private var userDeviceTokens: [String: String] = [:]
     
     private let queue = DispatchQueue(label: "com.ace.sessionManager", attributes: .concurrent)
     
-    func register(userId: String, token: String, routines: [Routine], deviceToken: String?, context: UserContext? = nil) {
+    func register(userId: String, token: String, refreshToken: String?, routines: [Routine], deviceToken: String?, context: UserContext? = nil) {
         queue.async(flags: .barrier) {
             self.activeSessions[userId] = token
+            if let rToken = refreshToken {
+                self.refreshTokens[userId] = rToken
+            }
             self.usersRoutines[userId] = routines
             if let dt = deviceToken {
                 self.userDeviceTokens[userId] = dt
@@ -32,8 +36,19 @@ class UserSessionManager {
             if let ctx = context {
                 self.userContexts[userId] = ctx
             }
-            print("✅ User Registered: \(userId) (DeviceToken: \(deviceToken != nil ? "Yes" : "No"), Context: \(context != nil ? "Yes" : "No"))")
+            print("✅ User Registered: \(userId) (DeviceToken: \(deviceToken != nil ? "Yes" : "No"), RefreshToken: \(refreshToken != nil ? "Yes" : "No"))")
         }
+    }
+    
+    func updateAccessToken(userId: String, token: String) {
+        queue.async(flags: .barrier) {
+            self.activeSessions[userId] = token
+            print("🔄 Updated Access Token for \(userId)")
+        }
+    }
+    
+    func getRefreshToken(for userId: String) -> String? {
+        queue.sync { refreshTokens[userId] }
     }
     
     func getAllSessions() -> [(userId: String, token: String, routines: [Routine], deviceToken: String?, context: UserContext?)] {
