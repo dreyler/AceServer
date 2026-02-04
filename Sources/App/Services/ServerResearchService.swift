@@ -122,8 +122,8 @@ public class ServerResearchService {
              print("   First: Searching for company using domain '\(domain)'")
              if let coData = await performSearch(query: domain, cache: cache) {
                  // CRITICAL FIX: Prioritize results whose link contains the actual domain
-                 let exactDomainMatch = coData.items.first { $0.link.contains(domain) }
-                 let selectedResult = exactDomainMatch ?? coData.items.first
+                 let exactDomainMatch = (coData.items ?? []).first { $0.link.contains(domain) }
+                 let selectedResult = exactDomainMatch ?? coData.items?.first
                  
                  if let selectedResult = selectedResult {
                      let extractedName = _extractCompanyName(title: selectedResult.title, domain: domain)
@@ -156,7 +156,7 @@ public class ServerResearchService {
         
         if let liData = await performSearch(query: liQuery, cache: cache) {
             // Filter for /in/
-            let profiles = liData.items.filter { $0.link.contains("linkedin.com/in/") }
+            let profiles = (liData.items ?? []).filter { $0.link.contains("linkedin.com/in/") }
             
             // NEW: Validate each profile against search name
             for profile in profiles {
@@ -187,7 +187,7 @@ public class ServerResearchService {
                 let fallbackQuery = "\(queryName) \(domain) linkedin"
                 
                 if let fbData = await performSearch(query: fallbackQuery, cache: cache) {
-                    let fbProfiles = fbData.items.filter { $0.link.contains("linkedin.com/in/") }
+                    let fbProfiles = (fbData.items ?? []).filter { $0.link.contains("linkedin.com/in/") }
                     
                     for profile in fbProfiles {
                         let (isValid, reason) = validateProfileMatch(
@@ -232,7 +232,7 @@ public class ServerResearchService {
         }
         
         if !companySearchQuery.isEmpty, let coData = await performSearch(query: companySearchQuery, cache: cache) {
-             if let first = coData.items.first {
+             if let first = coData.items?.first {
                  results.append(ResearchResult(
                     title: first.title, 
                     snippet: first.snippet, 
@@ -446,24 +446,49 @@ public class ServerResearchService {
         
         guard let url = components.url else { return nil }
         
-        // Simple retry logic
-        for attempt in 0..<2 {
+        // Backoff Retry Logic
+        var attempt = 1
+        let maxAttempts = 3
+        
+        while attempt <= maxAttempts {
             do {
-                print("[TRACE] ResearchService: 🔍 Google Search API Query: '\(query)' (Attempt \(attempt+1))")
+                print("[TRACE] ResearchService: 🔍 Google Search API Query: '\(query)' (Attempt \(attempt))")
                 let (data, response) = try await URLSession.shared.data(from: url)
-                guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-                    print("⚠️ CSE Error: \(String(data: data, encoding: .utf8) ?? "?")")
-                    continue 
+                guard let http = response as? HTTPURLResponse else { return nil }
+                
+                if http.statusCode == 200 {
+                    let result = try JSONDecoder().decode(GoogleSearchResponse.self, from: data)
+                    // Write to cache
+                    if let cache = cache { await cache.set(query, response: result) }
+                    return result
                 }
                 
-                let result = try JSONDecoder().decode(GoogleSearchResponse.self, from: data)
-                // Write to cache
-                if let cache = cache { await cache.set(query, response: result) }
-                return result
+                // Handle 429 (Rate Limit)
+                if http.statusCode == 429 {
+                    print("⚠️ CSE Rate Limit Exceeded (429).")
+                    if attempt == 1 {
+                        let waitSeconds = 5
+                        print("   ⏳ Backing off for \(waitSeconds) seconds...")
+                        try await Task.sleep(nanoseconds: UInt64(waitSeconds) * 1_000_000_000)
+                    } else if attempt == 2 {
+                        let waitSeconds = 10
+                        print("   ⏳ Backing off for \(waitSeconds) seconds...")
+                        try await Task.sleep(nanoseconds: UInt64(waitSeconds) * 1_000_000_000)
+                    } else {
+                        print("   ❌ Max retries reached for 429.")
+                        return nil
+                    }
+                } else {
+                    print("⚠️ CSE Error: \(String(data: data, encoding: .utf8) ?? "?")")
+                    return nil // Don't retry other errors (400, 403, etc)
+                }
                 
             } catch {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                print("⚠️ Network Exception: \(error)")
+                try? await Task.sleep(nanoseconds: 1_000_000_000) // Short wait for network blips
             }
+            
+            attempt += 1
         }
         
         return nil
@@ -471,7 +496,7 @@ public class ServerResearchService {
     
     // Minimal Models for CSE
     public struct GoogleSearchResponse: Codable {
-        public let items: [Item]
+        public let items: [Item]?
         
         public struct Item: Codable {
             public let title: String

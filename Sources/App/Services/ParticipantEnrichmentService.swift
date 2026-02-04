@@ -65,11 +65,19 @@ public class ParticipantEnrichmentService {
         let domain = email.split(separator: "@").last.map(String.init) ?? ""
         
         // Step 1: Call Google People API first (to get potential company info even for gmail)
-        app.logger.info("   📞 Calling Google People API...")
-        let googlePeopleData = await ServerGooglePeopleService.shared.resolve(
-            email: email,
-            accessToken: input.accessToken
-        )
+        // Step 1: Call Google People API first (to get potential company info even for gmail)
+        // SKIP if using mock token (testing mode)
+        let googlePeopleData: ServerGooglePeopleService.PersonInfo?
+        if input.accessToken == "mock_token" {
+            app.logger.info("   ⚠️  Using Mock Token - Skipping Google People API")
+            googlePeopleData = nil
+        } else {
+            app.logger.info("   📞 Calling Google People API...")
+            googlePeopleData = await ServerGooglePeopleService.shared.resolve(
+                email: email,
+                accessToken: input.accessToken
+            )
+        }
         
         let currentName = googlePeopleData?.name ?? input.displayName ?? "Unknown"
         let currentCompany = googlePeopleData?.company
@@ -155,8 +163,8 @@ public class ParticipantEnrichmentService {
                 let searchCache = ServerResearchService.ResearchCache()
                 if let searchResults = await ServerResearchService.shared.performSearch(query: companyQuery, cache: searchCache) {
                     // Prioritize exact domain match
-                    let exactMatch = searchResults.items.first { $0.link.contains(domain) }
-                    let selectedResult = exactMatch ?? searchResults.items.first
+                    let exactMatch = (searchResults.items ?? []).first { $0.link.contains(domain) }
+                    let selectedResult = exactMatch ?? searchResults.items?.first
                     
                     if let result = selectedResult {
                         let extracted = ServerResearchService.shared._extractCompanyName(title: result.title, domain: domain)
@@ -214,7 +222,7 @@ public class ParticipantEnrichmentService {
             
             // Quick search to get details
             if let searchResults = await ServerResearchService.shared.performSearch(query: companyQuery, cache: searchCache),
-               let result = searchResults.items.first {
+               let result = searchResults.items?.first {
                    
                 companyDetails = """
                 **\(result.title)**
@@ -230,7 +238,7 @@ public class ParticipantEnrichmentService {
         var linkedInTitle: String? = nil
         var linkedInDetails: String? = nil
         
-        if currentName != "Unknown" && !currentName.contains("@") {
+        if currentName != "Unknown" {
             app.logger.info("   🔍 Searching LinkedIn for: '\(currentName)' at '\(companyName!)'")
             
             // DELEGATE to unified Research Service which includes strict validation logic

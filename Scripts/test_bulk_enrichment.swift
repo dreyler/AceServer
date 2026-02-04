@@ -6,7 +6,11 @@ import FoundationNetworking
 // --- Configuration ---
 let serverUrl = URL(string: "http://localhost:8080/enrich-person-v2")!
 let csvPath = "/Users/davideyler/.gemini/antigravity/scratch/my enrichment - participants - good run on client side.csv"
-let outputPath = "/Users/davideyler/.gemini/antigravity/scratch/AceServer/enrichment_validation_results.txt"
+// Generate Timestamped Output Filename
+let dateFormatter = DateFormatter()
+dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+let timestamp = dateFormatter.string(from: Date())
+let outputPath = "/Users/davideyler/.gemini/antigravity/scratch/AceServer/enrichment_validation_results_\(timestamp).csv"
 
 // --- Models ---
 struct EnrichmentRequest: Codable {
@@ -71,14 +75,33 @@ func parseCSVLine(_ line: String) -> [String] {
 
 // --- logging Helper ---
 func log(_ message: String, to fileHandle: FileHandle?) {
+    // Print to console (formatted nicely)
     print(message)
+    // Write to file (CSV format - assuming message is already CSV line)
     if let data = (message + "\n").data(using: .utf8) {
         fileHandle?.write(data)
     }
 }
 
+func logCSV(_ fields: [String], to fileHandle: FileHandle?) {
+    // Escape quotes and wrap in quotes
+    let csvLine = fields.map { field in
+        let escaped = field.replacingOccurrences(of: "\"", with: "\"\"")
+        return "\"\(escaped)\""
+    }.joined(separator: ",")
+    
+    if let data = (csvLine + "\n").data(using: .utf8) {
+        fileHandle?.write(data)
+    }
+    
+    // Also print a readable summary to console
+    let status = fields.last ?? "?"
+    let email = fields.first ?? "?"
+    print("[\(status)] \(email)")
+}
+
 // --- Main Test Logic ---
-print("🚀 Starting Bulk Enrichment Test (Continuous Logging)...")
+print("🚀 Starting Bulk Enrichment Test (Continuous CSV Output)...")
 print("📂 Input: \(csvPath)")
 print("📄 Output: \(outputPath)")
 
@@ -86,8 +109,11 @@ print("📄 Output: \(outputPath)")
 FileManager.default.createFile(atPath: outputPath, contents: nil, attributes: nil)
 let fileHandle = FileHandle(forWritingAtPath: outputPath)
 
+// Write Header
+logCSV(["Email", "Name", "Expected URL", "Actual URL", "Status Code", "Result"], to: fileHandle)
+
 let rows = parseCSV(at: csvPath)
-log("📊 Found \(rows.count) rows to process.", to: fileHandle)
+print("📊 Found \(rows.count) rows to process.")
 
 var passed = 0
 var failed = 0
@@ -116,13 +142,22 @@ for (index, row) in rows.enumerated() {
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         defer { semaphore.signal() }
         
+        let httpStatus = (response as? HTTPURLResponse)?.statusCode ?? 0
+        let statusStr = "\(httpStatus)"
+        
         if let error = error {
-            log("❌ [ERROR] Request failed for \(email): \(error)", to: fileHandle)
+            logCSV([email, name, expectedUrlRaw, "ERROR: \(error.localizedDescription)", statusStr, "FAIL"], to: fileHandle)
             failed += 1
             return
         }
         
         guard let data = data else { return }
+        
+        if httpStatus == 429 {
+             logCSV([email, name, expectedUrlRaw, "RATE LIMITED", statusStr, "FAIL"], to: fileHandle)
+             failed += 1
+             return
+        }
         
         do {
             let result = try JSONDecoder().decode(EnrichmentResponse.self, from: data)
@@ -135,26 +170,18 @@ for (index, row) in rows.enumerated() {
             
             if cleanActual == cleanExpected {
                 // PASS
-                if cleanExpected == "N/A" {
-                    log("✅ [PASS-NEG] \(email) -> Correctly returned NIL", to: fileHandle)
-                } else {
-                    log("✅ [PASS] \(email) -> \(actualUrl)", to: fileHandle)
-                }
+                logCSV([email, name, expectedUrl, actualUrl, statusStr, "PASS"], to: fileHandle)
                 passed += 1
             } else {
                 // FAIL
-                if cleanExpected == "N/A" {
-                     log("❌ [FAIL-FALSE_POS] \(email): Expected NIL, Got \(actualUrl)", to: fileHandle)
-                } else if cleanActual == "N/A" {
-                     log("❌ [FAIL-MISS] \(email): Expected \(expectedUrl), Got NIL", to: fileHandle)
-                } else {
-                     log("⚠️ [FAIL-DIFF] \(email): Expected \(expectedUrl), Got \(actualUrl)", to: fileHandle)
-                }
+                logCSV([email, name, expectedUrl, actualUrl, statusStr, "FAIL"], to: fileHandle)
                 failed += 1
             }
             
         } catch {
-            log("❌ [ERROR] Decoder Error for \(email): \(error)", to: fileHandle)
+            let errorMsg = String(data: data, encoding: .utf8) ?? "Unknown Data"
+            // If it's a 500 or 400, strictly log it
+            logCSV([email, name, expectedUrlRaw, "DECODE Error / API Error: \(errorMsg.prefix(50))", statusStr, "FAIL"], to: fileHandle)
             failed += 1
         }
     }
@@ -171,9 +198,9 @@ for (index, row) in rows.enumerated() {
     Thread.sleep(forTimeInterval: 0.1)
 }
 
-log("\n--- Final Summary ---", to: fileHandle)
-log("✅ Passed: \(passed)", to: fileHandle)
-log("❌ Failed: \(failed)", to: fileHandle)
-log("Total: \(passed + failed)", to: fileHandle)
+print("\n--- Final Summary ---")
+print("Passed: \(passed)")
+print("Failed: \(failed)")
+print("Total: \(passed + failed)")
 
 fileHandle?.closeFile()
