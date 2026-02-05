@@ -9,9 +9,12 @@
 .env
 
 # Runtime Data (Do NOT Commit)
-ace_users.json   # Contains Access Tokens
-ace_people.json  # Contains PID info / cache
-ace_features.json # User-submitted feature requests (Runtime Data)
+# Contains Access Tokens
+ace_users.json
+# Contains PID info / cache
+ace_people.json
+# User-submitted feature requests (Runtime Data)
+ace_features.json
 
 # Logs
 *.log
