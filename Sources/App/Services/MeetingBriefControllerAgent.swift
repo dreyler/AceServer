@@ -55,11 +55,19 @@ class MeetingBriefControllerAgent {
         if !changedMeetings.isEmpty {
             app.logger.info("   🤖 Invoking Gemini for \(changedMeetings.count) meetings...")
             
-            // Find the "Before Meeting Prep" routine to get the custom prompt
             let prepRoutine = routines.first(where: { $0.type == .beforeMeeting })
             let userPrompt = prepRoutine?.customPrompt ?? "Send me a meeting brief as a silent push notification that will appear on my lock screen but not buzz my phone 10 minutes before each meeting in which there are participants other than only me."
             
-            await invokeAgent(userId: userId, meetings: changedMeetings, userPrompt: userPrompt, app: app)
+            // FILTER: Only ask Agent about FUTURE meetings (ignore history backfill)
+            let now = Date()
+            let futureMeetings = changedMeetings.filter { $0.startTime > now }
+            
+            if !futureMeetings.isEmpty {
+                app.logger.info("   🤖 Invoking Gemini for \(futureMeetings.count) future meetings (ignored \(changedMeetings.count - futureMeetings.count) past)...")
+                await invokeAgent(userId: userId, meetings: futureMeetings, userPrompt: userPrompt, app: app)
+            } else {
+                app.logger.info("   d Skipping Gemini: No future meetings in changed set.")
+            }
             
             // Mark reviewed
             let ids = changedMeetings.compactMap { $0.googleEvent.id ?? $0.id.uuidString }

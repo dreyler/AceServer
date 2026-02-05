@@ -10,6 +10,10 @@ struct Person: Codable {
     var title: String?
     var companyName: String?
     
+    // SERVER SIDE ENRICHMENT & MEMORY
+    var researchSummary: String?
+    var memories: [String]? // Persisted facts (e.g., "Likes Raiders")
+    
     // Logic Helpers
     var isColleague: Bool {
         // Simplified server-side logic (e.g. domain check)

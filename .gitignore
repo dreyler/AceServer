@@ -8,6 +8,11 @@
 # Environment variables (contains secrets)
 .env
 
+# Runtime Data (Do NOT Commit)
+ace_users.json   # Contains Access Tokens
+ace_people.json  # Contains PID info / cache
+ace_features.json # User-submitted feature requests (Runtime Data)
+
 # Logs
 *.log
 enrichment_validation_results.csv

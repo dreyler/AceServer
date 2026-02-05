@@ -79,11 +79,13 @@ class ServerCalendarService {
             
             if let token = syncToken {
                 queryItems.append(URLQueryItem(name: "syncToken", value: token))
+                app.logger.info("   🔄 Incremental Sync (Token: \(token.prefix(10))...)")
             } else {
-                // Initial Sync: Get future events
-                queryItems.append(URLQueryItem(name: "timeMin", value: Date().ISO8601Format()))
-                // NOTE: strictly forbidden to use orderBy if we want a syncToken!
-                // queryItems.append(URLQueryItem(name: "orderBy", value: "startTime")) 
+                // Initial Sync: Get past events (6 months history)
+                let sixMonthsAgo = Date().addingTimeInterval(-180 * 24 * 60 * 60)
+                let iso = sixMonthsAgo.ISO8601Format()
+                queryItems.append(URLQueryItem(name: "timeMin", value: iso))
+                app.logger.info("   🆕 Initial History Sync (TimeMin: \(iso))")
             }
             
             if let pageToken = currentPageToken {

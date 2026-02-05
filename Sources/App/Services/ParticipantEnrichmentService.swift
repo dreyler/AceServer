@@ -252,7 +252,7 @@ public class ParticipantEnrichmentService {
             if let linkedInHit = researchResults.first(where: { $0.source == "LinkedIn" }) {
                 linkedInUrl = linkedInHit.link
                 linkedInTitle = linkedInHit.title
-                linkedInDetails = "**\(linkedInHit.title)**\n\(linkedInHit.snippet)"
+                linkedInDetails = "**\(linkedInHit.title)**\n\(linkedInHit.snippet)\n[Source](\(linkedInHit.link))"
                 app.logger.info("   ✅ Found Verified LinkedIn: \(linkedInHit.link)")
             } else {
                 app.logger.warning("   ⚠️  No valid LinkedIn profile found (Active Validation Logic applied)")

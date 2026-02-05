@@ -124,6 +124,69 @@ class MeetingStore {
         }
     }
     
+    // MARK: - Participant History
+    
+    struct ParticipantHistory {
+        let meetingCount: Int
+        let lastMeetings: [Meeting] // Last 3 sorted desc
+    }
+    
+    func getParticipantHistory(
+        userId: String, 
+        participantEmail: String, 
+        excludingMeetingId: String? = nil
+    ) -> ParticipantHistory {
+        return queue.sync {
+             print("   🔍 getParticipantHistory called for \(participantEmail). ExcludeID: \(excludingMeetingId ?? "nil")") 
+            guard let userStore = store[userId] else { return ParticipantHistory(meetingCount: 0, lastMeetings: []) }
+            
+            let now = Date()
+            let emailLower = participantEmail.lowercased()
+            
+            let history = userStore.values
+                .map { $0.meeting }
+                .filter { meeting in
+                    // 1. Exclude by ID
+                    if let excludeId = excludingMeetingId {
+                        let currentId = meeting.googleEvent.id ?? "nil" // Use Google ID if available
+                         // print("   🔍 Comparing Exclude: '\(excludeId)' vs Candidate: '\(currentId)'") // Debug Only
+                        if currentId == excludeId {
+                             // print("   🚫 Filtering out current meeting from history: \(currentId)")
+                             return false
+                        }
+                    }
+                    
+                    // Must be in the past
+                    guard meeting.startTime < now else { return false }
+                    
+                    // Check participants (case insensitive check)
+                    let pMatches = meeting.participants.contains { p in
+                        // Use relationshipContext (email) for matching
+                        (p.relationshipContext ?? "").lowercased() == emailLower
+                    }
+                    
+                    // Also check organizer
+                    let orgLower = (meeting.organizer ?? "").lowercased()
+                    let oMatches = orgLower == emailLower || orgLower.contains(emailLower)
+                    
+                    return pMatches || oMatches
+                }
+                .sorted { $0.startTime > $1.startTime }
+            
+            // LOGGING
+            if !history.isEmpty {
+                print("   🔎 [History] Found \(history.count) past meetings for '\(participantEmail)'")
+            } else {
+                 // print("   🔎 [History] No past meetings for '\(participantEmail)' (Store size: \(userStore.count))")
+            }
+                
+            return ParticipantHistory(
+                meetingCount: history.count,
+                lastMeetings: Array(history.prefix(3))
+            )
+        }
+    }
+
     // Cleanup / Debug
     func clear(userId: String) {
         queue.async(flags: .barrier) {

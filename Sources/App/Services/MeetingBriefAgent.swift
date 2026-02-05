@@ -7,6 +7,7 @@ struct ParticipantInfo {
     let company: String
     let companyDetails: String?  // Company info only
     let linkedInDetails: String?  // LinkedIn info only
+    let history: MeetingStore.ParticipantHistory? // NEW
 }
 
 public struct MeetingBriefAgent {
@@ -22,6 +23,7 @@ public struct MeetingBriefAgent {
         userCompany: String? = nil,
         userBio: String? = nil,
         userLocalTime: String? = nil,
+        briefPreferences: [String]? = nil,
         app: Application
     ) async -> (brief: String, prompt: String) {
         
@@ -34,6 +36,8 @@ public struct MeetingBriefAgent {
         let maxParticipants = 50
         
         print("[TRACE] MeetingBriefAgent: 🚀 Processing \(attendees.count) attendees (Max \(maxParticipants))...")
+        
+        let meetingId = meeting.id
         
         // Concurrent Processing using TaskGroup - NEW V2 Enrichment
         let participantsInfo: [ParticipantInfo] = await withTaskGroup(of: ParticipantInfo?.self) { group in
@@ -60,7 +64,12 @@ public struct MeetingBriefAgent {
                         email: enriched.email,
                         company: enriched.company,
                         companyDetails: enriched.companyDetails,
-                        linkedInDetails: enriched.linkedInDetails
+                        linkedInDetails: enriched.linkedInDetails,
+                        history: MeetingStore.shared.getParticipantHistory(
+                            userId: userEmail, 
+                            participantEmail: email,
+                            excludingMeetingId: meetingId // Might be nil from Client
+                        )
                     )
                 }
             }
@@ -122,6 +131,9 @@ public struct MeetingBriefAgent {
                     if let linkedIn = p.linkedInDetails {
                         participantContext += "        <research>\n\(linkedIn)\n        </research>\n"
                     }
+                    
+                    participantContext += formatParticipantHistory(p.history)
+                    
                     participantContext += "      </person>\n"
                 }
                 participantContext += "    </people>\n"
@@ -141,6 +153,9 @@ public struct MeetingBriefAgent {
                 if let linkedIn = p.linkedInDetails {
                      participantContext += "    <research>\n\(linkedIn)\n    </research>\n"
                 }
+
+                participantContext += formatParticipantHistory(p.history)
+
                 participantContext += "  </person>\n"
             }
             participantContext += "</participants_from_unknown_companies>\n"
@@ -156,6 +171,17 @@ public struct MeetingBriefAgent {
         if let company = userCompany { userBioSection += "  <company>\(company)</company>\n" }
         if let bio = userBio, !bio.isEmpty { userBioSection += "  <bio>\(bio)</bio>\n" }
         userBioSection += "</logged_in_user>"
+        
+        // PREFERENCES
+        var preferencesSection = ""
+        if let prefs = briefPreferences, !prefs.isEmpty {
+            preferencesSection = """
+            
+            <user_preferences>
+            \(prefs.joined(separator: "\n"))
+            </user_preferences>
+            """
+        }
         
         // 4. Assemble Prompt for Gemini
         let prompt = """
@@ -174,14 +200,17 @@ public struct MeetingBriefAgent {
         \(participantContext)
         </participants>
 
+        \(preferencesSection)
+
         Rules:
         1. In general, use your own knowledge as well as the provided context to provide the best meeting brief
         2. However, there is a section labeled <participants_from_unknown_companies>, and you should not use your own knowledge or attempt to guess about this information as you are likely to guess wrong and provide incorrect information
         3. Make sure not to get confused and think that the logged in user is a participant
-        4. Don't provide company information about the company that the logged in user works at
-        5. Include company details, such as strategy and recent news, but not about anything in <participants_from_unknown_companies>
-        6. End with 1 short, strategic suggestion for the user to ask you a follow up question get more prepared for the meeting. put this question, but not the whole response, in italics
-        7. The brief must fit on single iPhone screen (no scrolling), and be dense with value.
+        4. Don't provide any information about the logged in user - the user already knows that
+        5. If the user asks for links, only provide them if you have them in the provided context - don't generate your own links
+        6. Include company details, such as strategy and recent news, but not about anything in <participants_from_unknown_companies>
+        7. End with 1 short, strategic suggestion for the user to ask you a follow up question get more prepared for the meeting. put this question, but not the whole response, in italics
+        8. The brief must fit on single iPhone screen (no scrolling), and be dense with value.
         """
         
         print("🤖 Gemini Request: Prompt length \(prompt.count)")
@@ -189,5 +218,28 @@ public struct MeetingBriefAgent {
         let brief = (try? await GeminiService.shared.generateContent(prompt: prompt)) ?? "Error generating brief"
         
         return (brief: brief, prompt: prompt)
+    }
+    
+    private static func formatParticipantHistory(_ history: MeetingStore.ParticipantHistory?) -> String {
+        guard let history = history, history.meetingCount > 0 else { return "" }
+        
+        var output = "        <past_meetings_last_6months_count>\(history.meetingCount)</past_meetings_last_6months_count>\n"
+        var historyCtx = ""
+        // Use consistent header label if needed, or just list
+        // Based on user request "Last 3 Meetings:" was in one but not the other?
+        // Let's standardise to "Last 3 Meetings:"
+        if !history.lastMeetings.isEmpty {
+             historyCtx = "Last 3 Meetings:\n"
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, h:mm a"
+        
+        for m in history.lastMeetings {
+            let dateStr = formatter.string(from: m.startTime)
+            historyCtx += "- \(m.title) (\(dateStr))\n"
+        }
+        output += "        <historical_context>\n\(historyCtx)        </historical_context>\n"
+        return output
     }
 }
